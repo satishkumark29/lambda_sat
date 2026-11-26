@@ -1,0 +1,2551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lambda &amp; Functional Programming – Interactive Playground</title>
+  <meta name="description" content="An interactive educational playground to explore Python lambda functions, map, filter, and reduce with an animated conveyor belt simulator, live code tracing, and a 5-question quiz." />
+  <meta property="og:title" content="Lambda &amp; Functional Programming – Interactive Playground" />
+  <meta property="og:description" content="Learn Lambda, Map, Filter, and Reduce visually with an interactive conveyor belt simulator, Python code highlighting, and instant quizzes." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ==========================================================================
+       Design System & Custom Properties (60% White/Slate, 30% Structural, 10% Blue/Purple)
+       ========================================================================== */
+    :root {
+      --bg-canvas: #ffffff;
+      --bg-surface: #f8fafc;
+      --bg-elevated: #ffffff;
+      --bg-code: #0f172a;
+      --border-hairline: #e2e8f0;
+      --border-strong: #cbd5e1;
+
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+
+      --accent-blue: #2563eb;
+      --accent-blue-hover: #1d4ed8;
+      --accent-blue-soft: #eff6ff;
+      --accent-blue-border: #bfdbfe;
+
+      --accent-purple: #7c3aed;
+      --accent-purple-hover: #6d28d9;
+      --accent-purple-soft: #f5f3ff;
+      --accent-purple-border: #ddd6fe;
+
+      --state-keep-text: #047857;
+      --state-keep-bg: #ecfdf5;
+      --state-keep-border: #a7f3d0;
+
+      --state-reject-text: #be123c;
+      --state-reject-bg: #fff1f2;
+      --state-reject-border: #fecdd3;
+
+      --font-display: 'Outfit', system-ui, -apple-system, sans-serif;
+      --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+      --radius-lg: 14px;
+      --radius-md: 10px;
+      --radius-sm: 8px;
+      --shadow-card: 0 1px 3px rgba(15, 23, 42, 0.05), 0 6px 20px rgba(15, 23, 42, 0.04);
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font-body);
+      color: var(--text-primary);
+      background-color: var(--bg-canvas);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: var(--font-display);
+      margin: 0;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      text-wrap: balance;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    code, pre, .mono {
+      font-family: var(--font-mono);
+      font-variant-numeric: tabular-nums;
+    }
+
+    button, input, select {
+      font-family: inherit;
+    }
+
+    button:focus-visible,
+    a:focus-visible,
+    input:focus-visible {
+      outline: 2px solid var(--accent-blue);
+      outline-offset: 2px;
+    }
+
+    /* Layout Container */
+    .container {
+      width: 100%;
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ==========================================================================
+       Top Navigation Bar (Strict 3-Zone Contract)
+       ========================================================================== */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 32px;
+      height: 68px;
+    }
+
+    .brand-mark {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      text-decoration: none;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .brand-mark span {
+      color: var(--accent-purple);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .nav-link {
+      font-size: 0.925rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-decoration: none;
+      white-space: nowrap;
+      flex-shrink: 0;
+      padding: 4px 0;
+      border-bottom: 2px solid transparent;
+      transition: color 0.16s var(--ease-out), border-color 0.16s var(--ease-out);
+    }
+
+    .nav-link:hover {
+      color: var(--accent-blue);
+      border-bottom-color: var(--accent-blue);
+    }
+
+    .header-cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 9px 18px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #ffffff;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      border: none;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      white-space: nowrap;
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: transform 0.16s var(--ease-out), opacity 0.16s var(--ease-out);
+    }
+
+    .header-cta:hover {
+      opacity: 0.94;
+      transform: translateY(-1px);
+    }
+
+    /* ==========================================================================
+       Hero Section
+       ========================================================================== */
+    .hero-section {
+      padding: 56px 0 44px;
+      background: radial-gradient(circle at 88% 12%, rgba(124, 58, 237, 0.08), transparent 42%),
+                  radial-gradient(circle at 12% 20%, rgba(37, 99, 235, 0.07), transparent 40%),
+                  var(--bg-canvas);
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 0.95fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .hero-kicker {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--accent-purple);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hero-title {
+      font-size: clamp(2.1rem, 3.8vw, 3.15rem);
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+    }
+
+    .hero-title .accent {
+      background: linear-gradient(120deg, var(--accent-blue), var(--accent-purple));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      max-width: 58ch;
+      margin-bottom: 28px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 22px;
+      min-height: 44px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #ffffff;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      border: none;
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: transform 0.16s var(--ease-out), box-shadow 0.16s var(--ease-out);
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.22);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(124, 58, 237, 0.28);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 20px;
+      min-height: 44px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      background: var(--bg-canvas);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background-color 0.16s var(--ease-out), border-color 0.16s var(--ease-out);
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg-surface);
+      border-color: var(--accent-blue);
+    }
+
+    /* Hero Visual Preview Card */
+    .hero-preview {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .hero-preview-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+
+    .mini-flow {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .mini-flow-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      background: var(--bg-canvas);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-md);
+    }
+
+    .mini-flow-op {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--accent-blue);
+      white-space: nowrap;
+    }
+
+    .mini-flow-op.purple {
+      color: var(--accent-purple);
+    }
+
+    .mini-flow-io {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      text-align: right;
+    }
+
+    /* ==========================================================================
+       Section Headings & Spacing
+       ========================================================================== */
+    .section {
+      padding: 56px 0;
+    }
+
+    .section-alt {
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border-hairline);
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      max-width: 68ch;
+    }
+
+    .section-eyebrow {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--accent-blue);
+      margin-bottom: 8px;
+    }
+
+    .section-title {
+      font-size: clamp(1.6rem, 2.5vw, 2.15rem);
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+    }
+
+    .section-desc {
+      font-size: 1rem;
+      color: var(--text-secondary);
+    }
+
+    /* ==========================================================================
+       1. Introduction Cards
+       ========================================================================== */
+    .concepts-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .concept-card {
+      background: var(--bg-canvas);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: var(--shadow-card);
+      transition: transform 0.2s var(--ease-out), border-color 0.2s var(--ease-out);
+    }
+
+    .concept-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent-blue-border);
+    }
+
+    .concept-meta {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--accent-purple);
+    }
+
+    .concept-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .concept-text {
+      font-size: 0.925rem;
+      color: var(--text-secondary);
+      flex-grow: 1;
+    }
+
+    .concept-snippet {
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      line-height: 1.5;
+      overflow-x: auto;
+    }
+
+    .concept-snippet .kw { color: #93c5fd; }
+    .concept-snippet .fn { color: #c4b5fd; }
+    .concept-snippet .cm { color: #94a3b8; }
+
+    .concept-try-btn {
+      align-self: flex-start;
+      padding: 8px 14px;
+      min-height: 38px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--accent-blue);
+      background: var(--accent-blue-soft);
+      border: 1px solid var(--accent-blue-border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background-color 0.16s var(--ease-out), color 0.16s var(--ease-out);
+    }
+
+    .concept-try-btn:hover {
+      background: var(--accent-blue);
+      color: #ffffff;
+    }
+
+    /* ==========================================================================
+       2-6. Interactive Playground & Conveyor Belt Simulator
+       ========================================================================== */
+    .playground-shell {
+      background: var(--bg-canvas);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+    }
+
+    /* Control Deck Header */
+    .control-deck {
+      padding: 24px;
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border-hairline);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .control-row {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr 1.3fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .control-group-label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    /* Segmented Tabs for Map / Filter / Reduce */
+    .segmented-control {
+      display: inline-flex;
+      width: 100%;
+      padding: 4px;
+      background: #e2e8f0;
+      border-radius: var(--radius-md);
+      gap: 4px;
+    }
+
+    .seg-btn {
+      flex: 1;
+      padding: 9px 12px;
+      min-height: 40px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: transparent;
+      border: none;
+      border-radius: 7px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background-color 0.16s var(--ease-out), color 0.16s var(--ease-out), box-shadow 0.16s var(--ease-out);
+    }
+
+    .seg-btn:hover {
+      color: var(--text-primary);
+    }
+
+    .seg-btn.active {
+      background: var(--bg-canvas);
+      color: var(--accent-blue);
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.1);
+    }
+
+    .seg-btn.active[data-mode="filter"] {
+      color: var(--accent-purple);
+    }
+
+    .seg-btn.active[data-mode="reduce"] {
+      color: #4f46e5;
+    }
+
+    /* Preset Button Grid */
+    .preset-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .preset-btn {
+      padding: 8px 12px;
+      min-height: 38px;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      background: var(--bg-canvas);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.16s var(--ease-out);
+    }
+
+    .preset-btn:hover {
+      border-color: var(--accent-blue);
+      background: var(--accent-blue-soft);
+    }
+
+    .preset-btn.active {
+      color: #ffffff;
+      background: var(--accent-blue);
+      border-color: var(--accent-blue);
+    }
+
+    .preset-btn.active.purple {
+      background: var(--accent-purple);
+      border-color: var(--accent-purple);
+    }
+
+    /* Playback & Speed Toolbar */
+    .playback-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .playback-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .ctrl-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 9px 16px;
+      min-height: 40px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-strong);
+      background: var(--bg-canvas);
+      color: var(--text-primary);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.16s var(--ease-out);
+    }
+
+    .ctrl-btn:hover:not(:disabled) {
+      border-color: var(--accent-blue);
+      background: var(--accent-blue-soft);
+      color: var(--accent-blue);
+    }
+
+    .ctrl-btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .ctrl-btn.primary {
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      border-color: transparent;
+      color: #ffffff;
+    }
+
+    .ctrl-btn.primary:hover:not(:disabled) {
+      opacity: 0.92;
+      color: #ffffff;
+      background: linear-gradient(135deg, var(--accent-blue-hover), var(--accent-purple-hover));
+    }
+
+    .ctrl-btn.step {
+      background: var(--accent-purple-soft);
+      border-color: var(--accent-purple-border);
+      color: var(--accent-purple);
+    }
+
+    .ctrl-btn.step:hover:not(:disabled) {
+      background: var(--accent-purple);
+      color: #ffffff;
+    }
+
+    .speed-control {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 220px;
+    }
+
+    .speed-label {
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+
+    .speed-value {
+      font-family: var(--font-mono);
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--accent-blue);
+      min-width: 46px;
+      text-align: right;
+    }
+
+    input[type="range"] {
+      accent-color: var(--accent-purple);
+      cursor: pointer;
+      width: 110px;
+    }
+
+    /* ==========================================================================
+       Animated Conveyor Belt Stage
+       ========================================================================== */
+    .stage-container {
+      padding: 28px 24px;
+      background: var(--bg-canvas);
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .stage-top-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .stage-lambda-banner {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 14px;
+      background: var(--accent-blue-soft);
+      border: 1px solid var(--accent-blue-border);
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+    }
+
+    .stage-lambda-banner.active-step {
+      background: var(--accent-purple-soft);
+      border-color: var(--accent-purple);
+      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
+    }
+
+    .stage-progress-text {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* 3-Column Conveyor Layout */
+    .conveyor-stage {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr 1fr;
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .belt-zone {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 220px;
+      position: relative;
+    }
+
+    .zone-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .zone-title {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+    }
+
+    .zone-count {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    /* Animated Belt Track */
+    .belt-track-wrap {
+      position: relative;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .belt-items {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      min-height: 68px;
+      padding: 12px;
+      background: var(--bg-canvas);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-sm);
+    }
+
+    .belt-rail {
+      height: 10px;
+      margin-top: 8px;
+      border-radius: 5px;
+      background-color: #e2e8f0;
+      background-image: repeating-linear-gradient(
+        -55deg,
+        #cbd5e1 0px,
+        #cbd5e1 8px,
+        #e2e8f0 8px,
+        #e2e8f0 16px
+      );
+      background-size: 28px 100%;
+    }
+
+    .belt-rail.moving {
+      animation: conveyorMove 0.7s linear infinite;
+    }
+
+    @keyframes conveyorMove {
+      from { background-position: 0 0; }
+      to { background-position: 28px 0; }
+    }
+
+    /* Token / Number Crates on Belt */
+    .crate {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-width: 46px;
+      height: 46px;
+      padding: 0 10px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      font-weight: 700;
+      background: #ffffff;
+      color: var(--text-primary);
+      border: 2px solid var(--border-strong);
+      box-shadow: 0 2px 4px rgba(15, 23, 42, 0.06);
+      transition: transform 0.25s var(--ease-out), opacity 0.25s var(--ease-out), border-color 0.2s, background-color 0.2s;
+    }
+
+    .crate.input-crate {
+      border-color: var(--accent-blue-border);
+      background: var(--accent-blue-soft);
+      color: var(--accent-blue-hover);
+    }
+
+    .crate.output-crate {
+      border-color: var(--state-keep-border);
+      background: var(--state-keep-bg);
+      color: var(--state-keep-text);
+      animation: popIn 0.28s var(--ease-out);
+    }
+
+    .crate.reject-crate {
+      border-color: var(--state-reject-border);
+      background: var(--state-reject-bg);
+      color: var(--state-reject-text);
+      text-decoration: line-through;
+      opacity: 0.85;
+      animation: popIn 0.28s var(--ease-out);
+    }
+
+    .crate.acc-crate {
+      min-width: 72px;
+      height: 54px;
+      font-size: 1.25rem;
+      border-color: var(--accent-purple);
+      background: var(--accent-purple-soft);
+      color: var(--accent-purple-hover);
+      animation: popIn 0.28s var(--ease-out);
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.84) translateY(6px); opacity: 0; }
+      100% { transform: scale(1) translateY(0); opacity: 1; }
+    }
+
+    /* Center Processor Machine */
+    .processor-zone {
+      background: linear-gradient(180deg, #f8fafc 0%, #eff6ff 100%);
+      border: 1.5px solid var(--accent-blue-border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 220px;
+      transition: border-color 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out);
+    }
+
+    .processor-zone.processing {
+      border-color: var(--accent-purple);
+      box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1);
+    }
+
+    .processor-chamber {
+      background: var(--bg-canvas);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-grow: 1;
+      text-align: center;
+    }
+
+    .chamber-active-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .chamber-arrow {
+      font-weight: 700;
+      color: var(--accent-purple);
+      font-size: 1.1rem;
+    }
+
+    .chamber-eval {
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      background: var(--bg-surface);
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--border-hairline);
+    }
+
+    .verdict-tag {
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .verdict-keep {
+      background: var(--state-keep-bg);
+      color: var(--state-keep-text);
+      border: 1px solid var(--state-keep-border);
+    }
+
+    .verdict-reject {
+      background: var(--state-reject-bg);
+      color: var(--state-reject-text);
+      border: 1px solid var(--state-reject-border);
+    }
+
+    .verdict-transform {
+      background: var(--accent-blue-soft);
+      color: var(--accent-blue-hover);
+      border: 1px solid var(--accent-blue-border);
+    }
+
+    /* Filter Reject Chute */
+    .reject-chute {
+      margin-top: 12px;
+      padding: 10px 12px;
+      background: var(--state-reject-bg);
+      border: 1px dashed var(--state-reject-border);
+      border-radius: var(--radius-sm);
+      display: none;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .reject-chute.visible {
+      display: flex;
+    }
+
+    .reject-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--state-reject-text);
+      white-space: nowrap;
+    }
+
+    .empty-slot-msg {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* ==========================================================================
+       5 & 6. Code Panel & Output Panel (Split Inspection Deck)
+       ========================================================================== */
+    .inspector-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      background: var(--bg-canvas);
+    }
+
+    .code-panel {
+      padding: 24px;
+      border-right: 1px solid var(--border-hairline);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .panel-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .panel-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .panel-subtitle {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .code-window {
+      background: var(--bg-code);
+      border-radius: var(--radius-md);
+      padding: 16px 0;
+      overflow-x: auto;
+      border: 1px solid #1e293b;
+    }
+
+    .code-line {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      padding: 4px 18px;
+      font-family: var(--font-mono);
+      font-size: 0.84rem;
+      line-height: 1.65;
+      color: #cbd5e1;
+      transition: background-color 0.18s var(--ease-out);
+      white-space: pre;
+    }
+
+    .code-line.active-line {
+      background: rgba(124, 58, 237, 0.28);
+      color: #ffffff;
+      box-shadow: inset 3px 0 0 #a78bfa;
+    }
+
+    .line-num {
+      color: #64748b;
+      user-select: none;
+      min-width: 18px;
+      text-align: right;
+      font-size: 0.78rem;
+    }
+
+    .code-line.active-line .line-num {
+      color: #c4b5fd;
+      font-weight: 700;
+    }
+
+    /* Output & Trace Panel */
+    .output-panel {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .output-result-box {
+      padding: 16px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-md);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .output-result-label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .output-result-value {
+      font-family: var(--font-mono);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--accent-blue);
+      word-break: break-word;
+    }
+
+    .output-explanation {
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+    }
+
+    .trace-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 180px;
+      overflow-y: auto;
+    }
+
+    .trace-item {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      padding: 7px 11px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 6px;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .trace-item.current {
+      background: var(--accent-purple-soft);
+      border-color: var(--accent-purple-border);
+      color: var(--accent-purple-hover);
+      font-weight: 600;
+    }
+
+    /* ==========================================================================
+       7. Knowledge Test (5-Question Quiz)
+       ========================================================================== */
+    .quiz-shell {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .quiz-questions {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .quiz-card {
+      background: var(--bg-canvas);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .quiz-q-meta {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--accent-purple);
+      margin-bottom: 6px;
+    }
+
+    .quiz-q-text {
+      font-size: 1.08rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+    }
+
+    .quiz-q-code {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      padding: 2px 7px;
+      border-radius: 5px;
+      color: var(--accent-blue-hover);
+    }
+
+    .quiz-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .quiz-opt-btn {
+      text-align: left;
+      padding: 12px 14px;
+      min-height: 44px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.16s var(--ease-out);
+    }
+
+    .quiz-opt-btn:hover:not(:disabled) {
+      border-color: var(--accent-blue);
+      background: var(--accent-blue-soft);
+    }
+
+    .quiz-opt-btn:disabled {
+      cursor: default;
+    }
+
+    .quiz-opt-btn.selected-correct {
+      background: var(--state-keep-bg);
+      border-color: var(--state-keep-text);
+      color: var(--state-keep-text);
+      font-weight: 600;
+    }
+
+    .quiz-opt-btn.selected-wrong {
+      background: var(--state-reject-bg);
+      border-color: var(--state-reject-text);
+      color: var(--state-reject-text);
+      font-weight: 600;
+    }
+
+    .quiz-opt-btn.reveal-correct {
+      border-color: var(--state-keep-text);
+      background: var(--state-keep-bg);
+      color: var(--state-keep-text);
+    }
+
+    .quiz-feedback {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.88rem;
+      display: none;
+    }
+
+    .quiz-feedback.visible {
+      display: block;
+    }
+
+    .quiz-feedback.correct {
+      background: var(--state-keep-bg);
+      border: 1px solid var(--state-keep-border);
+      color: var(--state-keep-text);
+    }
+
+    .quiz-feedback.wrong {
+      background: var(--state-reject-bg);
+      border: 1px solid var(--state-reject-border);
+      color: var(--state-reject-text);
+    }
+
+    /* Sticky Score Summary Card */
+    .quiz-sidebar {
+      position: sticky;
+      top: 92px;
+      background: var(--bg-canvas);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-card);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .score-display {
+      font-family: var(--font-display);
+      font-size: 2.35rem;
+      font-weight: 700;
+      color: var(--accent-blue);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .score-bar-bg {
+      width: 100%;
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .score-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+      transition: width 0.3s var(--ease-out);
+    }
+
+    /* Footer */
+    .site-footer {
+      padding: 28px 0;
+      border-top: 1px solid var(--border-hairline);
+      background: var(--bg-canvas);
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    /* ==========================================================================
+       Responsive Design & Reduced Motion
+       ========================================================================== */
+    @media (max-width: 1040px) {
+      .concepts-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .control-row {
+        grid-template-columns: 1fr;
+      }
+      .conveyor-stage {
+        grid-template-columns: 1fr;
+      }
+      .inspector-grid {
+        grid-template-columns: 1fr;
+      }
+      .code-panel {
+        border-right: none;
+        border-bottom: 1px solid var(--border-hairline);
+      }
+      .quiz-shell {
+        grid-template-columns: 1fr;
+      }
+      .quiz-sidebar {
+        position: static;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+      .nav-links {
+        display: none;
+      }
+      .concepts-grid {
+        grid-template-columns: 1fr;
+      }
+      .quiz-options {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Bar (3-Zone Contract) -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#top" class="brand-mark"><span>&lambda;</span> Lambda Playground</a>
+      <nav class="nav-links" aria-label="Primary Navigation">
+        <a href="#concepts" class="nav-link">Core Concepts</a>
+        <a href="#simulator" class="nav-link">Simulator</a>
+        <a href="#code-inspector" class="nav-link">Python Trace</a>
+        <a href="#quiz" class="nav-link">Knowledge Test</a>
+      </nav>
+      <a href="#simulator" class="header-cta">Open Simulator</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- Hero Introduction -->
+    <section class="hero-section">
+      <div class="container hero-grid">
+        <div>
+          <p class="hero-kicker">Functional Programming · Visual Learning Lab</p>
+          <h1 class="hero-title">Master <span class="accent">Lambda, Map, Filter &amp; Reduce</span> on a Live Conveyor Belt</h1>
+          <p class="hero-subtitle">
+            Watch every number travel through an interactive data pipeline. Step through transformations one element at a time, inspect synchronized Python code, and verify your intuition with instant feedback.
+          </p>
+          <div class="hero-actions">
+            <a href="#simulator" class="btn-primary">Start Interactive Simulator</a>
+            <a href="#quiz" class="btn-secondary">Take 5-Question Quiz</a>
+          </div>
+        </div>
+
+        <aside class="hero-preview" aria-label="Functional pipeline overview">
+          <p class="hero-preview-label">How the three higher-order functions shape a list</p>
+          <div class="mini-flow">
+            <div class="mini-flow-row">
+              <span class="mini-flow-op">map(x * 2)</span>
+              <span class="mini-flow-io">[1, 2, 3] &rarr; [2, 4, 6]</span>
+            </div>
+            <div class="mini-flow-row">
+              <span class="mini-flow-op purple">filter(x &gt; 4)</span>
+              <span class="mini-flow-io">[2, 5, 3, 8] &rarr; [5, 8]</span>
+            </div>
+            <div class="mini-flow-row">
+              <span class="mini-flow-op">reduce(acc + x)</span>
+              <span class="mini-flow-io">[1, 2, 3, 4] &rarr; 10</span>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- 1. Introduction: Lambda, Map, Filter & Reduce -->
+    <section id="concepts" class="section">
+      <div class="container">
+        <div class="section-header">
+          <p class="section-eyebrow">01. Foundation</p>
+          <h2 class="section-title">Four Building Blocks of Functional Python</h2>
+          <p class="section-desc">
+            Instead of writing manual index loops, functional programming passes small, single-purpose functions directly into pipeline operations.
+          </p>
+        </div>
+
+        <div class="concepts-grid">
+          <!-- Lambda Card -->
+          <article class="concept-card">
+            <span class="concept-meta">Anonymous Function</span>
+            <h3 class="concept-title">lambda</h3>
+            <p class="concept-text">
+              A compact, unnamed one-line function defined on the spot. It takes any number of arguments and returns the result of a single expression.
+            </p>
+            <pre class="concept-snippet"><span class="cm"># Regular vs lambda</span>
+<span class="kw">lambda</span> x: x * 2
+<span class="cm"># Input 4 &rarr; Returns 8</span></pre>
+            <button type="button" class="concept-try-btn" data-jump-mode="map">See lambda in Map &rarr;</button>
+          </article>
+
+          <!-- Map Card -->
+          <article class="concept-card">
+            <span class="concept-meta">Transform Every Item</span>
+            <h3 class="concept-title">map()</h3>
+            <p class="concept-text">
+              Applies a lambda rule to every single item on the belt and produces a new list of the exact same length with transformed values.
+            </p>
+            <pre class="concept-snippet"><span class="fn">list</span>(<span class="fn">map</span>(<span class="kw">lambda</span> x: x * 2, [1, 2, 3]))
+<span class="cm"># Output: [2, 4, 6]</span></pre>
+            <button type="button" class="concept-try-btn" data-jump-mode="map">Try Map Preset &rarr;</button>
+          </article>
+
+          <!-- Filter Card -->
+          <article class="concept-card">
+            <span class="concept-meta">Keep Passing Items</span>
+            <h3 class="concept-title">filter()</h3>
+            <p class="concept-text">
+              Tests each item against a True/False condition. Items returning True stay on the output belt; items returning False are rejected.
+            </p>
+            <pre class="concept-snippet"><span class="fn">list</span>(<span class="fn">filter</span>(<span class="kw">lambda</span> x: x &gt; 4, [2, 5, 8]))
+<span class="cm"># Output: [5, 8]</span></pre>
+            <button type="button" class="concept-try-btn" data-jump-mode="filter">Try Filter Preset &rarr;</button>
+          </article>
+
+          <!-- Reduce Card -->
+          <article class="concept-card">
+            <span class="concept-meta">Combine Into One Value</span>
+            <h3 class="concept-title">reduce()</h3>
+            <p class="concept-text">
+              Folds items together one by one using a running accumulator (<code class="mono">acc</code>) until the entire list collapses into a single final result.
+            </p>
+            <pre class="concept-snippet"><span class="fn">reduce</span>(<span class="kw">lambda</span> a, x: a + x, [1, 2, 3, 4])
+<span class="cm"># Output: 10</span></pre>
+            <button type="button" class="concept-try-btn" data-jump-mode="reduce">Try Reduce Preset &rarr;</button>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2, 3, 4, 5, 6. Interactive Playground & Step-by-Step Conveyor Simulator -->
+    <section id="simulator" class="section section-alt">
+      <div class="container">
+        <div class="section-header">
+          <p class="section-eyebrow">02. Interactive Simulator</p>
+          <h2 class="section-title">Conveyor Belt Pipeline Playground</h2>
+          <p class="section-desc">
+            Choose an operation, pick a safe input list and lambda preset, then click <strong>Process</strong>, <strong>Play</strong>, or step forward item by item with <strong>Next</strong>.
+          </p>
+        </div>
+
+        <div class="playground-shell">
+          <!-- Presets & Controls Deck -->
+          <div class="control-deck">
+            <div class="control-row">
+              <!-- Operation Mode -->
+              <div>
+                <span class="control-group-label">1. Operation Mode</span>
+                <div class="segmented-control" role="tablist" aria-label="Functional Operation Mode">
+                  <button type="button" class="seg-btn active" data-mode="map" role="tab" aria-selected="true">map()</button>
+                  <button type="button" class="seg-btn" data-mode="filter" role="tab" aria-selected="false">filter()</button>
+                  <button type="button" class="seg-btn" data-mode="reduce" role="tab" aria-selected="false">reduce()</button>
+                </div>
+              </div>
+
+              <!-- Input List Presets -->
+              <div>
+                <span class="control-group-label">2. Preset Input List</span>
+                <div id="input-presets" class="preset-group"></div>
+              </div>
+
+              <!-- Lambda Presets -->
+              <div>
+                <span class="control-group-label" id="lambda-preset-label">3. Lambda Operation Preset</span>
+                <div id="lambda-presets" class="preset-group"></div>
+              </div>
+            </div>
+
+            <!-- Playback Controls & Speed Slider -->
+            <div class="playback-bar">
+              <div class="playback-buttons">
+                <button type="button" id="btn-process" class="ctrl-btn primary">Process</button>
+                <button type="button" id="btn-play" class="ctrl-btn">Play</button>
+                <button type="button" id="btn-pause" class="ctrl-btn" disabled>Pause</button>
+                <button type="button" id="btn-next" class="ctrl-btn step">Next Step &rarr;</button>
+                <button type="button" id="btn-reset" class="ctrl-btn">Reset</button>
+              </div>
+
+              <div class="speed-control">
+                <label for="speed-slider" class="speed-label">Belt Speed</label>
+                <input type="range" id="speed-slider" min="0.5" max="2.5" step="0.25" value="1" />
+                <span id="speed-display" class="speed-value">1.0x</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Animated Conveyor Belt Canvas -->
+          <div class="stage-container">
+            <div class="stage-top-meta">
+              <div id="active-lambda-banner" class="stage-lambda-banner">
+                <span>Active Lambda:</span>
+                <code id="active-lambda-code" class="mono">lambda x: x * 2</code>
+              </div>
+              <div id="stage-progress-text" class="stage-progress-text">
+                Ready · Step 0 of 5
+              </div>
+            </div>
+
+            <div class="conveyor-stage">
+              <!-- Input Queue Belt -->
+              <div class="belt-zone">
+                <div class="zone-header">
+                  <span class="zone-title">Input Belt (Waiting)</span>
+                  <span id="input-count" class="zone-count">5 items</span>
+                </div>
+                <div class="belt-track-wrap">
+                  <div id="input-belt-items" class="belt-items"></div>
+                  <div id="rail-input" class="belt-rail"></div>
+                </div>
+              </div>
+
+              <!-- Center Lambda Processing Gate -->
+              <div id="processor-zone" class="processor-zone">
+                <div class="zone-header">
+                  <span class="zone-title" id="processor-title">Lambda Station · Map</span>
+                  <span id="processor-status" class="zone-count">Idle</span>
+                </div>
+                <div class="processor-chamber" id="processor-chamber">
+                  <p class="empty-slot-msg">Press <strong>Process</strong>, <strong>Play</strong>, or <strong>Next Step</strong> to feed the first number into the lambda gate.</p>
+                </div>
+              </div>
+
+              <!-- Output Belt / Accumulator -->
+              <div class="belt-zone">
+                <div class="zone-header">
+                  <span class="zone-title" id="output-zone-title">Output Belt (Result)</span>
+                  <span id="output-count" class="zone-count">0 items</span>
+                </div>
+                <div class="belt-track-wrap">
+                  <div id="output-belt-items" class="belt-items"></div>
+                  <div id="rail-output" class="belt-rail"></div>
+                </div>
+                <div id="reject-chute" class="reject-chute">
+                  <span class="reject-label">Rejected:</span>
+                  <div id="reject-items" class="preset-group"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 5 & 6. Code Panel & Output Explanation Panel -->
+          <div id="code-inspector" class="inspector-grid">
+            <!-- Python Code Panel -->
+            <div class="code-panel">
+              <div class="panel-title-row">
+                <h3 class="panel-title">Python Code Execution</h3>
+                <span id="code-phase-label" class="panel-subtitle">Line 1 · Input defined</span>
+              </div>
+              <div id="code-window" class="code-window" role="region" aria-label="Python code with active line highlight"></div>
+            </div>
+
+            <!-- Output & Intermediate Result Panel -->
+            <div class="output-panel">
+              <div class="panel-title-row">
+                <h3 class="panel-title">Output &amp; Step Trace</h3>
+                <span id="output-state-label" class="panel-subtitle">Waiting to start</span>
+              </div>
+
+              <div class="output-result-box">
+                <span id="result-box-label" class="output-result-label">Intermediate Result</span>
+                <div id="result-box-value" class="output-result-value">[ ]</div>
+                <p id="result-explanation" class="output-explanation">
+                  Select any preset above and step through the belt to inspect how each item is transformed or tested.
+                </p>
+              </div>
+
+              <div>
+                <span class="control-group-label">Step-by-Step Execution Log</span>
+                <ul id="trace-list" class="trace-list">
+                  <li class="trace-item">No items processed yet. Click Next Step or Play.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Knowledge Test (5 Multiple-Choice Questions) -->
+    <section id="quiz" class="section">
+      <div class="container">
+        <div class="section-header">
+          <p class="section-eyebrow">03. Knowledge Check</p>
+          <h2 class="section-title">Test Your Functional Programming Skills</h2>
+          <p class="section-desc">
+            Answer all five questions below to verify how <code class="mono">lambda</code>, <code class="mono">map</code>, <code class="mono">filter</code>, and <code class="mono">reduce</code> behave.
+          </p>
+        </div>
+
+        <div class="quiz-shell">
+          <div id="quiz-questions" class="quiz-questions"></div>
+
+          <aside class="quiz-sidebar" aria-label="Quiz Score Summary">
+            <div>
+              <span class="control-group-label">Your Progress</span>
+              <div id="quiz-score-display" class="score-display">0 / 5</div>
+              <p id="quiz-answered-meta" class="panel-subtitle">0 of 5 questions answered</p>
+            </div>
+
+            <div class="score-bar-bg">
+              <div id="quiz-score-bar" class="score-bar-fill"></div>
+            </div>
+
+            <p id="quiz-summary-msg" class="output-explanation">
+              Click an option on any question for instant feedback and an explanation.
+            </p>
+
+            <button type="button" id="btn-reset-quiz" class="btn-secondary">Retake Quiz</button>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>Lambda &amp; Functional Programming – Interactive Playground</span>
+      <span>Safe Preset Engine · HTML, CSS &amp; Vanilla JavaScript</span>
+    </div>
+  </footer>
+
+  <script>
+    /* ==========================================================================
+       Lambda & Functional Programming – Interactive Playground Engine
+       All operations use safe predefined functions (no eval or user-typed code).
+       ========================================================================== */
+    (function () {
+      "use strict";
+
+      // ------------------------------------------------------------------------
+      // 1. Predefined Safe Datasets & Operation Presets
+      // ------------------------------------------------------------------------
+      const INPUT_PRESETS = [
+        { id: "seq5", label: "[1, 2, 3, 4, 5]", data: [1, 2, 3, 4, 5] },
+        { id: "evens", label: "[2, 4, 6, 8, 10]", data: [2, 4, 6, 8, 10] },
+        { id: "mixed", label: "[3, 7, 2, 9, 5]", data: [3, 7, 2, 9, 5] },
+        { id: "odds", label: "[1, 3, 5, 7, 9]", data: [1, 3, 5, 7, 9] },
+        { id: "unsorted", label: "[10, 3, 8, 1, 6]", data: [10, 3, 8, 1, 6] }
+      ];
+
+      const OPERATIONS = {
+        map: {
+          title: "Map",
+          lambdaCodePrefix: "lambda x: ",
+          presets: [
+            {
+              id: "double",
+              label: "x * 2",
+              lambdaText: "lambda x: x * 2",
+              explainRule: "multiplies every number by 2",
+              fn: function (x) { return x * 2; },
+              describeStep: function (x, res) { return x + " * 2 = " + res; }
+            },
+            {
+              id: "plus5",
+              label: "x + 5",
+              lambdaText: "lambda x: x + 5",
+              explainRule: "adds 5 to every number",
+              fn: function (x) { return x + 5; },
+              describeStep: function (x, res) { return x + " + 5 = " + res; }
+            },
+            {
+              id: "square",
+              label: "x * x",
+              lambdaText: "lambda x: x * x",
+              explainRule: "squares every number (x * x)",
+              fn: function (x) { return x * x; },
+              describeStep: function (x, res) { return x + " * " + x + " = " + res; }
+            }
+          ]
+        },
+        filter: {
+          title: "Filter",
+          lambdaCodePrefix: "lambda x: ",
+          presets: [
+            {
+              id: "gt4",
+              label: "x > 4",
+              lambdaText: "lambda x: x > 4",
+              explainRule: "keeps only numbers strictly greater than 4",
+              fn: function (x) { return x > 4; },
+              describeStep: function (x, pass) { return x + " > 4 is " + (pass ? "True (Kept)" : "False (Rejected)"); }
+            },
+            {
+              id: "even",
+              label: "even numbers",
+              lambdaText: "lambda x: x % 2 == 0",
+              explainRule: "keeps numbers divisible by 2 with zero remainder",
+              fn: function (x) { return x % 2 === 0; },
+              describeStep: function (x, pass) { return x + " % 2 == 0 is " + (pass ? "True (Even)" : "False (Odd)"); }
+            },
+            {
+              id: "odd",
+              label: "odd numbers",
+              lambdaText: "lambda x: x % 2 != 0",
+              explainRule: "keeps numbers that leave a remainder of 1 when divided by 2",
+              fn: function (x) { return x % 2 !== 0; },
+              describeStep: function (x, pass) { return x + " % 2 != 0 is " + (pass ? "True (Odd)" : "False (Even)"); }
+            }
+          ]
+        },
+        reduce: {
+          title: "Reduce",
+          lambdaCodePrefix: "lambda acc, x: ",
+          presets: [
+            {
+              id: "sum",
+              label: "sum",
+              lambdaText: "lambda acc, x: acc + x",
+              explainRule: "adds each item to the running total (accumulator)",
+              fn: function (acc, x) { return acc + x; },
+              describeStep: function (acc, x, nextAcc) { return acc + " + " + x + " = " + nextAcc; }
+            },
+            {
+              id: "product",
+              label: "product",
+              lambdaText: "lambda acc, x: acc * x",
+              explainRule: "multiplies each item into the running product (accumulator)",
+              fn: function (acc, x) { return acc * x; },
+              describeStep: function (acc, x, nextAcc) { return acc + " * " + x + " = " + nextAcc; }
+            }
+          ]
+        }
+      };
+
+      // ------------------------------------------------------------------------
+      // 2. Five-Question Knowledge Test Data
+      // ------------------------------------------------------------------------
+      const QUIZ_DATA = [
+        {
+          id: 1,
+          topic: "Lambda Basics",
+          question: "What does a lambda expression create in Python?",
+          options: [
+            "A small anonymous function defined in a single expression",
+            "A permanent loop that runs in the background",
+            "A special list type that only stores numbers",
+            "A conditional if-else block that cannot return values"
+          ],
+          correctIndex: 0,
+          explanation: "Correct! A lambda creates an unnamed (anonymous) function with one expression that automatically returns its result."
+        },
+        {
+          id: 2,
+          topic: "Map Transformation",
+          question: "What is the output of list(map(lambda x: x + 5, [1, 2, 3]))?",
+          options: [
+            "[5, 5, 5]",
+            "[6, 7, 8]",
+            "[1, 2, 3, 5]",
+            "6"
+          ],
+          correctIndex: 1,
+          explanation: "map() applies x + 5 to each element independently: 1+5=6, 2+5=7, 3+5=8, returning [6, 7, 8]."
+        },
+        {
+          id: 3,
+          topic: "Filter Selection",
+          question: "What does list(filter(lambda x: x > 4, [2, 5, 3, 8])) return?",
+          options: [
+            "[False, True, False, True]",
+            "[2, 3]",
+            "[5, 8]",
+            "[6, 9, 7, 12]"
+          ],
+          correctIndex: 2,
+          explanation: "filter() keeps only the original items where the lambda returns True. Since 5 > 4 and 8 > 4, it returns [5, 8]."
+        },
+        {
+          id: 4,
+          topic: "Reduce Accumulation",
+          question: "What single value is produced by reduce(lambda acc, x: acc * x, [1, 2, 3, 4])?",
+          options: [
+            "10",
+            "24",
+            "[1, 2, 6, 24]",
+            "12"
+          ],
+          correctIndex: 1,
+          explanation: "reduce() starts with acc = 1, then multiplies step by step: 1*2 = 2, 2*3 = 6, 6*4 = 24."
+        },
+        {
+          id: 5,
+          topic: "Choosing the Right Tool",
+          question: "You have a list of prices [12, 45, 8, 30] and want to keep only prices under 20. Which function fits best?",
+          options: [
+            "map()",
+            "reduce()",
+            "filter()",
+            "lambda alone without a list function"
+          ],
+          correctIndex: 2,
+          explanation: "filter() is built for selecting a subset of items that satisfy a condition (lambda p: p < 20)."
+        }
+      ];
+
+      // ------------------------------------------------------------------------
+      // 3. Application State
+      // ------------------------------------------------------------------------
+      const state = {
+        mode: "map",                 // "map" | "filter" | "reduce"
+        inputPresetId: "seq5",
+        lambdaPresetId: "double",
+        stepIndex: 0,                // Number of items processed so far (0..N)
+        isPlaying: false,
+        speedMultiplier: 1.0,
+        timerId: null,
+        outputItems: [],             // Used for map & filter
+        rejectedItems: [],           // Used for filter
+        accumulator: null,           // Used for reduce
+        currentStepDetail: null,     // Snapshot of the most recent processed item
+        traceLogs: [],
+        quizAnswers: {}              // { questionId: selectedIndex }
+      };
+
+      // ------------------------------------------------------------------------
+      // 4. DOM Element References
+      // ------------------------------------------------------------------------
+      const els = {
+        modeButtons: document.querySelectorAll(".seg-btn"),
+        jumpButtons: document.querySelectorAll("[data-jump-mode]"),
+        inputPresetsWrap: document.getElementById("input-presets"),
+        lambdaPresetsWrap: document.getElementById("lambda-presets"),
+        btnProcess: document.getElementById("btn-process"),
+        btnPlay: document.getElementById("btn-play"),
+        btnPause: document.getElementById("btn-pause"),
+        btnNext: document.getElementById("btn-next"),
+        btnReset: document.getElementById("btn-reset"),
+        speedSlider: document.getElementById("speed-slider"),
+        speedDisplay: document.getElementById("speed-display"),
+
+        activeLambdaBanner: document.getElementById("active-lambda-banner"),
+        activeLambdaCode: document.getElementById("active-lambda-code"),
+        stageProgressText: document.getElementById("stage-progress-text"),
+        inputCount: document.getElementById("input-count"),
+        inputBeltItems: document.getElementById("input-belt-items"),
+        railInput: document.getElementById("rail-input"),
+        processorZone: document.getElementById("processor-zone"),
+        processorTitle: document.getElementById("processor-title"),
+        processorStatus: document.getElementById("processor-status"),
+        processorChamber: document.getElementById("processor-chamber"),
+        outputZoneTitle: document.getElementById("output-zone-title"),
+        outputCount: document.getElementById("output-count"),
+        outputBeltItems: document.getElementById("output-belt-items"),
+        railOutput: document.getElementById("rail-output"),
+        rejectChute: document.getElementById("reject-chute"),
+        rejectItems: document.getElementById("reject-items"),
+
+        codeWindow: document.getElementById("code-window"),
+        codePhaseLabel: document.getElementById("code-phase-label"),
+        outputStateLabel: document.getElementById("output-state-label"),
+        resultBoxLabel: document.getElementById("result-box-label"),
+        resultBoxValue: document.getElementById("result-box-value"),
+        resultExplanation: document.getElementById("result-explanation"),
+        traceList: document.getElementById("trace-list"),
+
+        quizQuestions: document.getElementById("quiz-questions"),
+        quizScoreDisplay: document.getElementById("quiz-score-display"),
+        quizAnsweredMeta: document.getElementById("quiz-answered-meta"),
+        quizScoreBar: document.getElementById("quiz-score-bar"),
+        quizSummaryMsg: document.getElementById("quiz-summary-msg"),
+        btnResetQuiz: document.getElementById("btn-reset-quiz")
+      };
+
+      // ------------------------------------------------------------------------
+      // 5. Helper Functions
+      // ------------------------------------------------------------------------
+      function getCurrentInput() {
+        return INPUT_PRESETS.find(function (p) { return p.id === state.inputPresetId; }) || INPUT_PRESETS[0];
+      }
+
+      function getCurrentOperation() {
+        return OPERATIONS[state.mode];
+      }
+
+      function getCurrentLambdaPreset() {
+        var op = getCurrentOperation();
+        return op.presets.find(function (p) { return p.id === state.lambdaPresetId; }) || op.presets[0];
+      }
+
+      function getStepDelayMs() {
+        // Base delay 1100ms divided by speed slider (0.5x -> 2200ms, 2.5x -> 440ms)
+        return Math.round(1100 / state.speedMultiplier);
+      }
+
+      function escapeHtml(str) {
+        return String(str)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+      }
+
+      // ------------------------------------------------------------------------
+      // 6. Core Simulation Step Logic
+      // ------------------------------------------------------------------------
+      function stopPlayback() {
+        if (state.timerId !== null) {
+          clearTimeout(state.timerId);
+          state.timerId = null;
+        }
+        state.isPlaying = false;
+      }
+
+      function resetSimulation() {
+        stopPlayback();
+        state.stepIndex = 0;
+        state.outputItems = [];
+        state.rejectedItems = [];
+        state.accumulator = null;
+        state.currentStepDetail = null;
+        state.traceLogs = [];
+        renderAll();
+      }
+
+      function advanceOneStep() {
+        var inputObj = getCurrentInput();
+        var data = inputObj.data;
+        var preset = getCurrentLambdaPreset();
+
+        if (state.stepIndex >= data.length) {
+          stopPlayback();
+          renderAll();
+          return false;
+        }
+
+        var item = data[state.stepIndex];
+
+        if (state.mode === "map") {
+          var transformed = preset.fn(item);
+          state.outputItems.push(transformed);
+          state.currentStepDetail = {
+            kind: "map",
+            input: item,
+            output: transformed,
+            evalText: preset.describeStep(item, transformed),
+            verdict: "TRANSFORMED"
+          };
+          state.traceLogs.push("Step " + (state.stepIndex + 1) + ": x=" + item + " -> " + transformed);
+        } else if (state.mode === "filter") {
+          var passed = preset.fn(item);
+          if (passed) {
+            state.outputItems.push(item);
+          } else {
+            state.rejectedItems.push(item);
+          }
+          state.currentStepDetail = {
+            kind: "filter",
+            input: item,
+            passed: passed,
+            evalText: preset.describeStep(item, passed),
+            verdict: passed ? "KEPT" : "REJECTED"
+          };
+          state.traceLogs.push("Step " + (state.stepIndex + 1) + ": x=" + item + " -> " + (passed ? "Kept" : "Rejected"));
+        } else if (state.mode === "reduce") {
+          if (state.stepIndex === 0) {
+            // Initialize accumulator with the first element (standard Python reduce behavior)
+            state.accumulator = item;
+            state.currentStepDetail = {
+              kind: "reduce-init",
+              input: item,
+              prevAcc: null,
+              nextAcc: item,
+              evalText: "Initialize accumulator: acc = " + item,
+              verdict: "SEEDED ACC"
+            };
+            state.traceLogs.push("Step 1: Initialize acc = " + item);
+          } else {
+            var prevAcc = state.accumulator;
+            var nextAcc = preset.fn(prevAcc, item);
+            state.accumulator = nextAcc;
+            state.currentStepDetail = {
+              kind: "reduce",
+              input: item,
+              prevAcc: prevAcc,
+              nextAcc: nextAcc,
+              evalText: preset.describeStep(prevAcc, item, nextAcc),
+              verdict: "ACCUMULATED"
+            };
+            state.traceLogs.push("Step " + (state.stepIndex + 1) + ": acc=" + prevAcc + ", x=" + item + " -> acc=" + nextAcc);
+          }
+        }
+
+        state.stepIndex += 1;
+
+        if (state.stepIndex >= data.length) {
+          stopPlayback();
+        }
+
+        renderAll();
+        return state.stepIndex < data.length;
+      }
+
+      function scheduleNextTick() {
+        if (!state.isPlaying) return;
+        state.timerId = setTimeout(function () {
+          var hasMore = advanceOneStep();
+          if (hasMore && state.isPlaying) {
+            scheduleNextTick();
+          }
+        }, getStepDelayMs());
+      }
+
+      function startPlayback() {
+        var data = getCurrentInput().data;
+        if (state.stepIndex >= data.length) {
+          resetSimulation();
+        }
+        state.isPlaying = true;
+        renderAll();
+        // Run first step briskly, then continue at configured speed
+        state.timerId = setTimeout(function () {
+          var hasMore = advanceOneStep();
+          if (hasMore && state.isPlaying) {
+            scheduleNextTick();
+          }
+        }, Math.min(350, getStepDelayMs()));
+      }
+
+      function processAllImmediately() {
+        resetSimulation();
+        startPlayback();
+      }
+
+      // ------------------------------------------------------------------------
+      // 7. Rendering Functions
+      // ------------------------------------------------------------------------
+      function renderPresets() {
+        // Render input presets
+        els.inputPresetsWrap.innerHTML = "";
+        INPUT_PRESETS.forEach(function (preset) {
+          var btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "preset-btn" + (preset.id === state.inputPresetId ? " active" : "");
+          btn.textContent = preset.label;
+          btn.addEventListener("click", function () {
+            state.inputPresetId = preset.id;
+            resetSimulation();
+          });
+          els.inputPresetsWrap.appendChild(btn);
+        });
+
+        // Render lambda presets for active mode
+        var op = getCurrentOperation();
+        els.lambdaPresetsWrap.innerHTML = "";
+        op.presets.forEach(function (preset) {
+          var btn = document.createElement("button");
+          btn.type = "button";
+          var activeClass = preset.id === state.lambdaPresetId
+            ? (state.mode === "filter" ? " active purple" : " active")
+            : "";
+          btn.className = "preset-btn" + activeClass;
+          btn.textContent = preset.label;
+          btn.addEventListener("click", function () {
+            state.lambdaPresetId = preset.id;
+            resetSimulation();
+          });
+          els.lambdaPresetsWrap.appendChild(btn);
+        });
+
+        // Sync segmented mode buttons
+        els.modeButtons.forEach(function (btn) {
+          var isSelected = btn.dataset.mode === state.mode;
+          btn.classList.toggle("active", isSelected);
+          btn.setAttribute("aria-selected", isSelected ? "true" : "false");
+        });
+      }
+
+      function renderPlaybackControls() {
+        var total = getCurrentInput().data.length;
+        var finished = state.stepIndex >= total;
+
+        els.btnPlay.disabled = state.isPlaying;
+        els.btnPause.disabled = !state.isPlaying;
+        els.btnNext.disabled = state.isPlaying || finished;
+        els.btnReset.disabled = state.stepIndex === 0 && !state.isPlaying;
+        els.speedDisplay.textContent = state.speedMultiplier.toFixed(2).replace(/\.00$/, ".0") + "x";
+      }
+
+      function renderConveyorStage() {
+        var inputData = getCurrentInput().data;
+        var op = getCurrentOperation();
+        var preset = getCurrentLambdaPreset();
+        var total = inputData.length;
+        var finished = state.stepIndex >= total;
+
+        // Top banner
+        els.activeLambdaCode.textContent = preset.lambdaText;
+        els.activeLambdaBanner.classList.toggle("active-step", state.stepIndex > 0 && !finished);
+
+        if (state.stepIndex === 0) {
+          els.stageProgressText.textContent = "Ready · Step 0 of " + total;
+        } else if (finished) {
+          els.stageProgressText.textContent = "Complete · " + total + " of " + total + " items processed";
+        } else {
+          els.stageProgressText.textContent = "Processing · Step " + state.stepIndex + " of " + total;
+        }
+
+        // Input Belt (remaining items)
+        var waiting = inputData.slice(state.stepIndex);
+        els.inputCount.textContent = waiting.length + (waiting.length === 1 ? " item" : " items");
+        els.inputBeltItems.innerHTML = "";
+        if (waiting.length === 0) {
+          var doneMsg = document.createElement("span");
+          doneMsg.className = "empty-slot-msg";
+          doneMsg.textContent = "All input items fed into gate";
+          els.inputBeltItems.appendChild(doneMsg);
+        } else {
+          waiting.forEach(function (val) {
+            var crate = document.createElement("div");
+            crate.className = "crate input-crate";
+            crate.textContent = val;
+            els.inputBeltItems.appendChild(crate);
+          });
+        }
+
+        // Animate belt rails while actively playing
+        els.railInput.classList.toggle("moving", state.isPlaying && waiting.length > 0);
+        els.railOutput.classList.toggle("moving", state.isPlaying);
+
+        // Center Processor Chamber
+        els.processorTitle.textContent = "Lambda Station · " + op.title;
+        els.processorZone.classList.toggle("processing", state.stepIndex > 0 && !finished);
+
+        if (!state.currentStepDetail) {
+          els.processorStatus.textContent = "Idle";
+          els.processorChamber.innerHTML =
+            '<p class="empty-slot-msg">Press <strong>Process</strong>, <strong>Play</strong>, or <strong>Next Step</strong> to feed the first number into the lambda gate.</p>';
+        } else {
+          var d = state.currentStepDetail;
+          els.processorStatus.textContent = finished ? "Done" : "Active";
+
+          if (d.kind === "map") {
+            els.processorChamber.innerHTML =
+              '<div class="chamber-active-row">' +
+                '<div class="crate input-crate">' + escapeHtml(d.input) + '</div>' +
+                '<span class="chamber-arrow">&rarr;</span>' +
+                '<div class="crate output-crate">' + escapeHtml(d.output) + '</div>' +
+              '</div>' +
+              '<div class="chamber-eval">' + escapeHtml(d.evalText) + '</div>' +
+              '<span class="verdict-tag verdict-transform">&#9881; ' + d.verdict + '</span>';
+          } else if (d.kind === "filter") {
+            var verdictClass = d.passed ? "verdict-keep" : "verdict-reject";
+            var verdictSymbol = d.passed ? "&#10003;" : "&#10005;";
+            var outCrateClass = d.passed ? "output-crate" : "reject-crate";
+            els.processorChamber.innerHTML =
+              '<div class="chamber-active-row">' +
+                '<div class="crate input-crate">' + escapeHtml(d.input) + '</div>' +
+                '<span class="chamber-arrow">&rarr;</span>' +
+                '<div class="crate ' + outCrateClass + '">' + escapeHtml(d.input) + '</div>' +
+              '</div>' +
+              '<div class="chamber-eval">' + escapeHtml(d.evalText) + '</div>' +
+              '<span class="verdict-tag ' + verdictClass + '">' + verdictSymbol + ' ' + d.verdict + '</span>';
+          } else if (d.kind === "reduce-init") {
+            els.processorChamber.innerHTML =
+              '<div class="chamber-active-row">' +
+                '<div class="crate input-crate">' + escapeHtml(d.input) + '</div>' +
+                '<span class="chamber-arrow">&rarr;</span>' +
+                '<div class="crate acc-crate">acc=' + escapeHtml(d.nextAcc) + '</div>' +
+              '</div>' +
+              '<div class="chamber-eval">' + escapeHtml(d.evalText) + '</div>' +
+              '<span class="verdict-tag verdict-transform">&#9679; ' + d.verdict + '</span>';
+          } else if (d.kind === "reduce") {
+            els.processorChamber.innerHTML =
+              '<div class="chamber-active-row">' +
+                '<div class="crate acc-crate">' + escapeHtml(d.prevAcc) + '</div>' +
+                '<span class="chamber-arrow">+</span>' +
+                '<div class="crate input-crate">' + escapeHtml(d.input) + '</div>' +
+                '<span class="chamber-arrow">&rarr;</span>' +
+                '<div class="crate acc-crate">' + escapeHtml(d.nextAcc) + '</div>' +
+              '</div>' +
+              '<div class="chamber-eval">' + escapeHtml(d.evalText) + '</div>' +
+              '<span class="verdict-tag verdict-keep">&#10003; ' + d.verdict + '</span>';
+          }
+        }
+
+        // Output Belt / Accumulator Bin
+        els.outputBeltItems.innerHTML = "";
+        if (state.mode === "reduce") {
+          els.outputZoneTitle.textContent = "Accumulator Register (Final Value)";
+          els.outputCount.textContent = state.accumulator === null ? "Empty" : "1 value";
+          els.rejectChute.classList.remove("visible");
+
+          if (state.accumulator === null) {
+            els.outputBeltItems.innerHTML = '<span class="empty-slot-msg">Accumulator starts empty until step 1</span>';
+          } else {
+            var accCrate = document.createElement("div");
+            accCrate.className = "crate acc-crate";
+            accCrate.textContent = state.accumulator;
+            els.outputBeltItems.appendChild(accCrate);
+          }
+        } else {
+          els.outputZoneTitle.textContent = "Output Belt (Result List)";
+          els.outputCount.textContent = state.outputItems.length + (state.outputItems.length === 1 ? " item" : " items");
+
+          if (state.outputItems.length === 0) {
+            els.outputBeltItems.innerHTML = '<span class="empty-slot-msg">Accepted / transformed items appear here</span>';
+          } else {
+            state.outputItems.forEach(function (val) {
+              var crate = document.createElement("div");
+              crate.className = "crate output-crate";
+              crate.textContent = val;
+              els.outputBeltItems.appendChild(crate);
+            });
+          }
+
+          // Reject chute only visible in filter mode when items have been rejected
+          if (state.mode === "filter" && state.rejectedItems.length > 0) {
+            els.rejectChute.classList.add("visible");
+            els.rejectItems.innerHTML = "";
+            state.rejectedItems.forEach(function (val) {
+              var rej = document.createElement("div");
+              rej.className = "crate reject-crate";
+              rej.textContent = val;
+              els.rejectItems.appendChild(rej);
+            });
+          } else {
+            els.rejectChute.classList.remove("visible");
+          }
+        }
+      }
+
+      function renderCodePanel() {
+        var inputObj = getCurrentInput();
+        var preset = getCurrentLambdaPreset();
+        var total = inputObj.data.length;
+        var finished = state.stepIndex >= total;
+
+        var lines = [];
+        var activeLineIndex = 0;
+        var phaseDescription = "Line 1 · Input list initialized";
+
+        if (state.mode === "map") {
+          lines = [
+            "numbers = " + inputObj.label,
+            "transform = " + preset.lambdaText,
+            "result = list(map(transform, numbers))",
+            "print(result)  # -> " + JSON.stringify(inputObj.data.map(preset.fn))
+          ];
+          if (state.stepIndex === 0) {
+            activeLineIndex = 0;
+            phaseDescription = "Line 1 · Waiting to feed numbers into map()";
+          } else if (!finished) {
+            activeLineIndex = 1;
+            phaseDescription = "Line 2 · Applying lambda to x = " + inputObj.data[state.stepIndex - 1];
+          } else {
+            activeLineIndex = 3;
+            phaseDescription = "Line 4 · All items mapped into final list";
+          }
+        } else if (state.mode === "filter") {
+          lines = [
+            "numbers = " + inputObj.label,
+            "predicate = " + preset.lambdaText,
+            "result = list(filter(predicate, numbers))",
+            "print(result)  # -> " + JSON.stringify(inputObj.data.filter(preset.fn))
+          ];
+          if (state.stepIndex === 0) {
+            activeLineIndex = 0;
+            phaseDescription = "Line 1 · Waiting to test numbers in filter()";
+          } else if (!finished) {
+            activeLineIndex = 1;
+            phaseDescription = "Line 2 · Testing predicate on x = " + inputObj.data[state.stepIndex - 1];
+          } else {
+            activeLineIndex = 3;
+            phaseDescription = "Line 4 · Passing items collected in final list";
+          }
+        } else {
+          var finalVal = inputObj.data.reduce(preset.fn);
+          lines = [
+            "from functools import reduce",
+            "numbers = " + inputObj.label,
+            "combine = " + preset.lambdaText,
+            "result = reduce(combine, numbers)",
+            "print(result)  # -> " + finalVal
+          ];
+          if (state.stepIndex === 0) {
+            activeLineIndex = 1;
+            phaseDescription = "Line 2 · Waiting to fold numbers with reduce()";
+          } else if (!finished) {
+            activeLineIndex = 2;
+            phaseDescription = "Line 3 · Updating accumulator with x = " + inputObj.data[state.stepIndex - 1];
+          } else {
+            activeLineIndex = 4;
+            phaseDescription = "Line 5 · Final accumulated value ready";
+          }
+        }
+
+        els.codePhaseLabel.textContent = phaseDescription;
+        els.codeWindow.innerHTML = "";
+
+        lines.forEach(function (lineText, idx) {
+          var row = document.createElement("div");
+          row.className = "code-line" + (idx === activeLineIndex ? " active-line" : "");
+
+          var numSpan = document.createElement("span");
+          numSpan.className = "line-num";
+          numSpan.textContent = String(idx + 1);
+
+          var codeSpan = document.createElement("span");
+          codeSpan.textContent = lineText;
+
+          row.appendChild(numSpan);
+          row.appendChild(codeSpan);
+          els.codeWindow.appendChild(row);
+        });
+      }
+
+      function renderOutputPanel() {
+        var inputObj = getCurrentInput();
+        var preset = getCurrentLambdaPreset();
+        var total = inputObj.data.length;
+        var finished = state.stepIndex >= total;
+
+        if (state.stepIndex === 0) {
+          els.outputStateLabel.textContent = "Waiting to start";
+        } else if (!finished) {
+          els.outputStateLabel.textContent = "In progress (" + state.stepIndex + "/" + total + ")";
+        } else {
+          els.outputStateLabel.textContent = "Complete";
+        }
+
+        if (state.mode === "reduce") {
+          els.resultBoxLabel.textContent = finished ? "Final Accumulated Value" : "Current Accumulator (acc)";
+          els.resultBoxValue.textContent = state.accumulator === null ? "None" : String(state.accumulator);
+        } else {
+          els.resultBoxLabel.textContent = finished ? "Final Output List" : "Intermediate Output List";
+          els.resultBoxValue.textContent = "[" + state.outputItems.join(", ") + "]";
+        }
+
+        // Dynamic plain-English explanation
+        if (state.stepIndex === 0) {
+          els.resultExplanation.textContent =
+            "The selected " + state.mode + " operation (" + preset.lambdaText + ") " + preset.explainRule +
+            ". Click Process, Play, or Next Step to watch each item move through the belt.";
+        } else if (!finished) {
+          els.resultExplanation.textContent =
+            "Processed " + state.stepIndex + " of " + total + " items. " +
+            (state.currentStepDetail ? state.currentStepDetail.evalText + "." : "");
+        } else {
+          if (state.mode === "map") {
+            els.resultExplanation.textContent =
+              "Complete! map() applied " + preset.lambdaText + " to all " + total + " items, returning a new list of equal length: [" + state.outputItems.join(", ") + "].";
+          } else if (state.mode === "filter") {
+            els.resultExplanation.textContent =
+              "Complete! filter() kept " + state.outputItems.length + " item(s) matching " + preset.lambdaText + " and rejected " + state.rejectedItems.length + " item(s).";
+          } else {
+            els.resultExplanation.textContent =
+              "Complete! reduce() folded all " + total + " items using " + preset.lambdaText + " down to a single final value: " + state.accumulator + ".";
+          }
+        }
+
+        // Trace Log
+        els.traceList.innerHTML = "";
+        if (state.traceLogs.length === 0) {
+          var placeholder = document.createElement("li");
+          placeholder.className = "trace-item";
+          placeholder.textContent = "No items processed yet. Click Next Step or Play.";
+          els.traceList.appendChild(placeholder);
+        } else {
+          state.traceLogs.forEach(function (entry, idx) {
+            var li = document.createElement("li");
+            li.className = "trace-item" + (idx === state.traceLogs.length - 1 ? " current" : "");
+            li.textContent = entry;
+            els.traceList.appendChild(li);
+          });
+          els.traceList.scrollTop = els.traceList.scrollHeight;
+        }
+      }
+
+      function renderQuiz() {
+        els.quizQuestions.innerHTML = "";
+        var answeredCount = 0;
+        var correctCount = 0;
+
+        QUIZ_DATA.forEach(function (q, qIdx) {
+          var chosen = state.quizAnswers[q.id];
+          var isAnswered = chosen !== undefined;
+          if (isAnswered) {
+            answeredCount += 1;
+            if (chosen === q.correctIndex) correctCount += 1;
+          }
+
+          var card = document.createElement("article");
+          card.className = "quiz-card";
+
+          var meta = document.createElement("div");
+          meta.className = "quiz-q-meta";
+          meta.textContent = "Question " + (qIdx + 1) + " of " + QUIZ_DATA.length + " · " + q.topic;
+
+          var title = document.createElement("h3");
+          title.className = "quiz-q-text";
+          title.textContent = q.question;
+
+          var optionsWrap = document.createElement("div");
+          optionsWrap.className = "quiz-options";
+
+          q.options.forEach(function (optText, optIdx) {
+            var btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "quiz-opt-btn";
+            btn.textContent = String.fromCharCode(65 + optIdx) + ". " + optText;
+
+            if (isAnswered) {
+              btn.disabled = true;
+              if (optIdx === chosen && chosen === q.correctIndex) {
+                btn.classList.add("selected-correct");
+              } else if (optIdx === chosen && chosen !== q.correctIndex) {
+                btn.classList.add("selected-wrong");
+              } else if (optIdx === q.correctIndex) {
+                btn.classList.add("reveal-correct");
+              }
+            }
+
+            btn.addEventListener("click", function () {
+              state.quizAnswers[q.id] = optIdx;
+              renderQuiz();
+            });
+
+            optionsWrap.appendChild(btn);
+          });
+
+          var feedback = document.createElement("div");
+          feedback.className = "quiz-feedback" + (isAnswered ? " visible" : "");
+          if (isAnswered) {
+            var isRight = chosen === q.correctIndex;
+            feedback.classList.add(isRight ? "correct" : "wrong");
+            feedback.textContent = (isRight ? "✓ Correct! " : "✕ Not quite. ") + q.explanation;
+          }
+
+          card.appendChild(meta);
+          card.appendChild(title);
+          card.appendChild(optionsWrap);
+          card.appendChild(feedback);
+          els.quizQuestions.appendChild(card);
+        });
+
+        // Update Sidebar Score
+        els.quizScoreDisplay.textContent = correctCount + " / " + QUIZ_DATA.length;
+        els.quizAnsweredMeta.textContent = answeredCount + " of " + QUIZ_DATA.length + " questions answered";
+        els.quizScoreBar.style.width = ((answeredCount / QUIZ_DATA.length) * 100) + "%";
+
+        if (answeredCount === 0) {
+          els.quizSummaryMsg.textContent = "Click an option on any question for instant feedback and an explanation.";
+        } else if (answeredCount < QUIZ_DATA.length) {
+          els.quizSummaryMsg.textContent = "Keep going! You have answered " + answeredCount + " of " + QUIZ_DATA.length + " questions.";
+        } else if (correctCount === QUIZ_DATA.length) {
+          els.quizSummaryMsg.textContent = "Perfect 5/5 score! You have a solid command of lambda, map, filter, and reduce.";
+        } else {
+          els.quizSummaryMsg.textContent = "Quiz complete! You scored " + correctCount + " out of 5. Review any missed explanations or click Retake Quiz.";
+        }
+      }
+
+      function renderAll() {
+        renderPresets();
+        renderPlaybackControls();
+        renderConveyorStage();
+        renderCodePanel();
+        renderOutputPanel();
+      }
+
+      // ------------------------------------------------------------------------
+      // 8. Event Wiring
+      // ------------------------------------------------------------------------
+      function switchOperationMode(newMode) {
+        if (!OPERATIONS[newMode]) return;
+        state.mode = newMode;
+        // Default to the first preset of the selected mode
+        state.lambdaPresetId = OPERATIONS[newMode].presets[0].id;
+        resetSimulation();
+      }
+
+      els.modeButtons.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          switchOperationMode(btn.dataset.mode);
+        });
+      });
+
+      els.jumpButtons.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          switchOperationMode(btn.dataset.jumpMode);
+          document.getElementById("simulator").scrollIntoView({ behavior: "smooth" });
+        });
+      });
+
+      els.btnProcess.addEventListener("click", processAllImmediately);
+      els.btnPlay.addEventListener("click", startPlayback);
+      els.btnPause.addEventListener("click", function () {
+        stopPlayback();
+        renderAll();
+      });
+      els.btnNext.addEventListener("click", function () {
+        stopPlayback();
+        advanceOneStep();
+      });
+      els.btnReset.addEventListener("click", resetSimulation);
+
+      els.speedSlider.addEventListener("input", function (e) {
+        state.speedMultiplier = parseFloat(e.target.value) || 1.0;
+        renderPlaybackControls();
+      });
+
+      els.btnResetQuiz.addEventListener("click", function () {
+        state.quizAnswers = {};
+        renderQuiz();
+      });
+
+      // Initial Boot
+      renderAll();
+      renderQuiz();
+    })();
+  </script>
+</body>
+</html>

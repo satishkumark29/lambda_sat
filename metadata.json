@@ -1,0 +1,6 @@
+{
+  "name": "Lambda & Functional Programming – Interactive Playground",
+  "description": "An interactive educational playground to explore Python lambda functions, map, filter, and reduce with an animated conveyor belt simulator, live code tracing, and a 5-question quiz.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
