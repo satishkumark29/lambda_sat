@@ -17,34 +17,34 @@
        Design System & Custom Properties (60% White/Slate, 30% Structural, 10% Blue/Purple)
        ========================================================================== */
     :root {
-      --bg-canvas: #ffffff;
-      --bg-surface: #f8fafc;
-      --bg-elevated: #ffffff;
-      --bg-code: #0f172a;
-      --border-hairline: #e2e8f0;
-      --border-strong: #cbd5e1;
+      --bg-canvas: rgba(15, 25, 52, 0.56);
+      --bg-surface: rgba(11, 19, 42, 0.64);
+      --bg-elevated: rgba(20, 32, 64, 0.68);
+      --bg-code: rgba(6, 12, 28, 0.84);
+      --border-hairline: rgba(148, 163, 184, 0.2);
+      --border-strong: rgba(148, 163, 184, 0.34);
 
-      --text-primary: #0f172a;
-      --text-secondary: #475569;
-      --text-muted: #64748b;
+      --text-primary: #f1f5f9;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
 
-      --accent-blue: #2563eb;
-      --accent-blue-hover: #1d4ed8;
-      --accent-blue-soft: #eff6ff;
-      --accent-blue-border: #bfdbfe;
+      --accent-blue: #3b82f6;
+      --accent-blue-hover: #60a5fa;
+      --accent-blue-soft: rgba(37, 99, 235, 0.22);
+      --accent-blue-border: rgba(96, 165, 250, 0.45);
 
-      --accent-purple: #7c3aed;
-      --accent-purple-hover: #6d28d9;
-      --accent-purple-soft: #f5f3ff;
-      --accent-purple-border: #ddd6fe;
+      --accent-purple: #8b5cf6;
+      --accent-purple-hover: #a78bfa;
+      --accent-purple-soft: rgba(124, 58, 237, 0.22);
+      --accent-purple-border: rgba(167, 139, 250, 0.45);
 
-      --state-keep-text: #047857;
-      --state-keep-bg: #ecfdf5;
-      --state-keep-border: #a7f3d0;
+      --state-keep-text: #6ee7b7;
+      --state-keep-bg: rgba(6, 78, 59, 0.42);
+      --state-keep-border: rgba(52, 211, 153, 0.48);
 
-      --state-reject-text: #be123c;
-      --state-reject-bg: #fff1f2;
-      --state-reject-border: #fecdd3;
+      --state-reject-text: #fda4af;
+      --state-reject-bg: rgba(136, 19, 55, 0.38);
+      --state-reject-border: rgba(251, 113, 133, 0.48);
 
       --font-display: 'Outfit', system-ui, -apple-system, sans-serif;
       --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
@@ -53,7 +53,7 @@
       --radius-lg: 14px;
       --radius-md: 10px;
       --radius-sm: 8px;
-      --shadow-card: 0 1px 3px rgba(15, 23, 42, 0.05), 0 6px 20px rgba(15, 23, 42, 0.04);
+      --shadow-card: 0 12px 34px rgba(2, 6, 23, 0.36);
       --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
     }
 
@@ -67,11 +67,158 @@
 
     body {
       margin: 0;
+      position: relative;
+      min-height: 100vh;
       font-family: var(--font-body);
       color: var(--text-primary);
-      background-color: var(--bg-canvas);
+      background-color: #04091a;
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ==========================================================================
+       Full-Page Fixed 3D Python-Themed Background
+       ========================================================================== */
+    .python-3d-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 80% 55% at 15% 18%, rgba(37, 99, 235, 0.28), transparent 62%),
+        radial-gradient(ellipse 70% 55% at 85% 22%, rgba(124, 58, 237, 0.22), transparent 60%),
+        radial-gradient(ellipse 65% 50% at 50% 88%, rgba(14, 165, 233, 0.18), transparent 65%),
+        linear-gradient(160deg, #020614 0%, #071330 38%, #0b1c44 72%, #071029 100%);
+    }
+
+    .bg-3d-scene {
+      position: absolute;
+      inset: 0;
+      perspective: 1100px;
+      transform-style: preserve-3d;
+    }
+
+    /* Subtle 3D Perspective Grid Floor */
+    .bg-3d-grid {
+      position: absolute;
+      left: -25%;
+      right: -25%;
+      bottom: -32%;
+      height: 85%;
+      background-image:
+        linear-gradient(to right, rgba(96, 165, 250, 0.12) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(139, 92, 246, 0.12) 1px, transparent 1px);
+      background-size: 56px 56px;
+      transform-origin: center bottom;
+      transform: rotateX(74deg) translate3d(0, 0, -60px);
+      mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, transparent 78%);
+      -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, transparent 78%);
+      animation: gridDrift 16s linear infinite;
+    }
+
+    @keyframes gridDrift {
+      0% { transform: rotateX(74deg) translate3d(0, 0, -60px); }
+      100% { transform: rotateX(74deg) translate3d(0, 56px, -60px); }
+    }
+
+    /* Glowing Ambient Particles */
+    .bg-particles {
+      position: absolute;
+      inset: 0;
+    }
+
+    .bg-particle {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(147, 197, 253, 0.95) 0%, rgba(59, 130, 246, 0.45) 55%, transparent 100%);
+      box-shadow: 0 0 16px rgba(96, 165, 250, 0.75), 0 0 32px rgba(124, 58, 237, 0.35);
+      animation: particleFloat var(--dur, 14s) ease-in-out infinite;
+      animation-delay: var(--delay, 0s);
+      will-change: transform, opacity;
+    }
+
+    .bg-particle.gold {
+      background: radial-gradient(circle, rgba(253, 224, 71, 0.95) 0%, rgba(250, 204, 21, 0.38) 55%, transparent 100%);
+      box-shadow: 0 0 14px rgba(250, 204, 21, 0.65), 0 0 28px rgba(59, 130, 246, 0.25);
+    }
+
+    .bg-particle.purple {
+      background: radial-gradient(circle, rgba(196, 181, 253, 0.95) 0%, rgba(124, 58, 237, 0.45) 55%, transparent 100%);
+      box-shadow: 0 0 16px rgba(167, 139, 250, 0.75);
+    }
+
+    @keyframes particleFloat {
+      0%, 100% {
+        transform: translate3d(0, 0, 0) scale(1);
+        opacity: 0.35;
+      }
+      50% {
+        transform: translate3d(var(--dx, 18px), var(--dy, -46px), 40px) scale(1.28);
+        opacity: 0.9;
+      }
+    }
+
+    /* Floating 3D Python Logos */
+    .floating-py-logo {
+      position: absolute;
+      transform-style: preserve-3d;
+      filter: drop-shadow(0 14px 28px rgba(37, 99, 235, 0.35)) drop-shadow(0 0 18px rgba(250, 204, 21, 0.16));
+      animation: float3DLogo var(--dur, 20s) ease-in-out infinite;
+      animation-delay: var(--delay, 0s);
+      will-change: transform;
+    }
+
+    @keyframes float3DLogo {
+      0%, 100% {
+        transform: translate3d(0, 0, var(--z, 0px)) rotateX(12deg) rotateY(-18deg) rotateZ(-4deg);
+      }
+      50% {
+        transform: translate3d(var(--dx, 16px), var(--dy, -26px), calc(var(--z, 0px) + 45px)) rotateX(-14deg) rotateY(22deg) rotateZ(6deg);
+      }
+    }
+
+    /* Floating 3D Python Code Elements */
+    .floating-code-3d {
+      position: absolute;
+      padding: 10px 16px;
+      font-family: var(--font-mono);
+      font-size: 0.86rem;
+      font-weight: 600;
+      color: #dbeafe;
+      background: rgba(15, 31, 68, 0.62);
+      border: 1px solid rgba(96, 165, 250, 0.32);
+      border-radius: 10px;
+      box-shadow: 0 12px 30px rgba(2, 6, 23, 0.55), inset 0 1px 0 rgba(191, 219, 254, 0.18);
+      backdrop-filter: blur(6px);
+      white-space: nowrap;
+      transform-style: preserve-3d;
+      animation: float3DCode var(--dur, 18s) ease-in-out infinite;
+      animation-delay: var(--delay, 0s);
+      will-change: transform;
+    }
+
+    .floating-code-3d .py-kw { color: #93c5fd; }
+    .floating-code-3d .py-gold { color: #fde047; }
+    .floating-code-3d .py-purp { color: #c4b5fd; }
+
+    @keyframes float3DCode {
+      0%, 100% {
+        transform: translate3d(0, 0, var(--z, 0px)) rotateX(10deg) rotateY(var(--ry, -14deg));
+      }
+      50% {
+        transform: translate3d(var(--dx, -14px), var(--dy, -24px), calc(var(--z, 0px) + 32px)) rotateX(-8deg) rotateY(calc(var(--ry, -14deg) * -1));
+      }
+    }
+
+    /* Dark Semi-Transparent Main Container Overlay */
+    .main-dashboard {
+      position: relative;
+      z-index: 2;
+      background: rgba(5, 10, 24, 0.56);
+      backdrop-filter: blur(2px);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
     }
 
     h1, h2, h3, h4 {
@@ -117,9 +264,9 @@
       position: sticky;
       top: 0;
       z-index: 40;
-      background: rgba(255, 255, 255, 0.92);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(6, 13, 32, 0.84);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.18);
     }
 
     .header-inner {
@@ -134,14 +281,14 @@
       font-family: var(--font-display);
       font-size: 1.15rem;
       font-weight: 700;
-      color: var(--text-primary);
+      color: #f8fafc;
       text-decoration: none;
       white-space: nowrap;
       flex-shrink: 0;
     }
 
     .brand-mark span {
-      color: var(--accent-purple);
+      color: #a78bfa;
     }
 
     .nav-links {
@@ -153,7 +300,7 @@
     .nav-link {
       font-size: 0.925rem;
       font-weight: 500;
-      color: var(--text-secondary);
+      color: #cbd5e1;
       text-decoration: none;
       white-space: nowrap;
       flex-shrink: 0;
@@ -163,8 +310,8 @@
     }
 
     .nav-link:hover {
-      color: var(--accent-blue);
-      border-bottom-color: var(--accent-blue);
+      color: #93c5fd;
+      border-bottom-color: #60a5fa;
     }
 
     .header-cta {
@@ -195,10 +342,8 @@
        ========================================================================== */
     .hero-section {
       padding: 56px 0 44px;
-      background: radial-gradient(circle at 88% 12%, rgba(124, 58, 237, 0.08), transparent 42%),
-                  radial-gradient(circle at 12% 20%, rgba(37, 99, 235, 0.07), transparent 40%),
-                  var(--bg-canvas);
-      border-bottom: 1px solid var(--border-hairline);
+      background: transparent;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.16);
     }
 
     .hero-grid {
@@ -211,7 +356,7 @@
     .hero-kicker {
       font-size: 0.875rem;
       font-weight: 600;
-      color: var(--accent-purple);
+      color: #a78bfa;
       margin-bottom: 12px;
       display: flex;
       align-items: center;
@@ -221,12 +366,12 @@
     .hero-title {
       font-size: clamp(2.1rem, 3.8vw, 3.15rem);
       font-weight: 700;
-      color: var(--text-primary);
+      color: #f8fafc;
       margin-bottom: 16px;
     }
 
     .hero-title .accent {
-      background: linear-gradient(120deg, var(--accent-blue), var(--accent-purple));
+      background: linear-gradient(120deg, #60a5fa, #c084fc);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
@@ -234,7 +379,7 @@
 
     .hero-subtitle {
       font-size: 1.05rem;
-      color: var(--text-secondary);
+      color: #cbd5e1;
       max-width: 58ch;
       margin-bottom: 28px;
     }
@@ -295,13 +440,25 @@
       border-color: var(--accent-blue);
     }
 
+    .hero-actions .btn-secondary {
+      color: #f8fafc;
+      background: rgba(15, 23, 42, 0.72);
+      border-color: rgba(148, 163, 184, 0.35);
+    }
+
+    .hero-actions .btn-secondary:hover {
+      background: rgba(30, 41, 59, 0.85);
+      border-color: #60a5fa;
+    }
+
     /* Hero Visual Preview Card */
     .hero-preview {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-hairline);
+      background: rgba(15, 25, 52, 0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(148, 163, 184, 0.22);
       border-radius: var(--radius-lg);
       padding: 24px;
-      box-shadow: var(--shadow-card);
+      box-shadow: 0 14px 36px rgba(2, 6, 23, 0.42);
     }
 
     .hero-preview-label {
@@ -323,20 +480,20 @@
       justify-content: space-between;
       gap: 12px;
       padding: 12px 14px;
-      background: var(--bg-canvas);
-      border: 1px solid var(--border-hairline);
+      background: rgba(10, 18, 38, 0.62);
+      border: 1px solid rgba(148, 163, 184, 0.18);
       border-radius: var(--radius-md);
     }
 
     .mini-flow-op {
       font-weight: 600;
       font-size: 0.9rem;
-      color: var(--accent-blue);
+      color: #93c5fd;
       white-space: nowrap;
     }
 
     .mini-flow-op.purple {
-      color: var(--accent-purple);
+      color: #c4b5fd;
     }
 
     .mini-flow-io {
@@ -354,9 +511,9 @@
     }
 
     .section-alt {
-      background: var(--bg-surface);
-      border-top: 1px solid var(--border-hairline);
-      border-bottom: 1px solid var(--border-hairline);
+      background: rgba(10, 19, 44, 0.36);
+      border-top: 1px solid rgba(148, 163, 184, 0.16);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.16);
     }
 
     .section-header {
@@ -367,20 +524,27 @@
     .section-eyebrow {
       font-size: 0.85rem;
       font-weight: 600;
-      color: var(--accent-blue);
+      color: #60a5fa;
       margin-bottom: 8px;
     }
 
     .section-title {
       font-size: clamp(1.6rem, 2.5vw, 2.15rem);
       font-weight: 700;
-      color: var(--text-primary);
+      color: #f8fafc;
       margin-bottom: 10px;
     }
 
     .section-desc {
       font-size: 1rem;
-      color: var(--text-secondary);
+      color: #cbd5e1;
+    }
+
+    .section-desc code.mono {
+      color: #93c5fd;
+      background: rgba(30, 58, 138, 0.4);
+      padding: 1px 6px;
+      border-radius: 4px;
     }
 
     /* ==========================================================================
@@ -393,14 +557,15 @@
     }
 
     .concept-card {
-      background: var(--bg-canvas);
-      border: 1px solid var(--border-hairline);
+      background: rgba(15, 25, 52, 0.58);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(148, 163, 184, 0.22);
       border-radius: var(--radius-lg);
       padding: 22px;
       display: flex;
       flex-direction: column;
       gap: 12px;
-      box-shadow: var(--shadow-card);
+      box-shadow: 0 12px 30px rgba(2, 6, 23, 0.36);
       transition: transform 0.2s var(--ease-out), border-color 0.2s var(--ease-out);
     }
 
@@ -412,7 +577,7 @@
     .concept-meta {
       font-size: 0.8rem;
       font-weight: 600;
-      color: var(--accent-purple);
+      color: var(--accent-purple-hover);
     }
 
     .concept-title {
@@ -428,7 +593,8 @@
     }
 
     .concept-snippet {
-      background: #0f172a;
+      background: rgba(6, 12, 28, 0.82);
+      border: 1px solid rgba(148, 163, 184, 0.16);
       color: #e2e8f0;
       padding: 12px 14px;
       border-radius: var(--radius-sm);
@@ -448,7 +614,7 @@
       min-height: 38px;
       font-size: 0.84rem;
       font-weight: 600;
-      color: var(--accent-blue);
+      color: #93c5fd;
       background: var(--accent-blue-soft);
       border: 1px solid var(--accent-blue-border);
       border-radius: var(--radius-sm);
@@ -458,18 +624,19 @@
     }
 
     .concept-try-btn:hover {
-      background: var(--accent-blue);
-      color: #ffffff;
+      background: rgba(37, 99, 235, 0.72);
+      color: #f8fafc;
     }
 
     /* ==========================================================================
        2-6. Interactive Playground & Conveyor Belt Simulator
        ========================================================================== */
     .playground-shell {
-      background: var(--bg-canvas);
-      border: 1px solid var(--border-hairline);
+      background: rgba(14, 23, 48, 0.62);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(148, 163, 184, 0.22);
       border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-card);
+      box-shadow: 0 18px 44px rgba(2, 6, 23, 0.44);
       overflow: hidden;
     }
 
@@ -503,7 +670,8 @@
       display: inline-flex;
       width: 100%;
       padding: 4px;
-      background: #e2e8f0;
+      background: rgba(8, 14, 32, 0.72);
+      border: 1px solid rgba(148, 163, 184, 0.18);
       border-radius: var(--radius-md);
       gap: 4px;
     }
@@ -528,17 +696,19 @@
     }
 
     .seg-btn.active {
-      background: var(--bg-canvas);
-      color: var(--accent-blue);
-      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.1);
+      background: rgba(37, 99, 235, 0.36);
+      color: #93c5fd;
+      box-shadow: 0 1px 4px rgba(2, 6, 23, 0.35);
     }
 
     .seg-btn.active[data-mode="filter"] {
-      color: var(--accent-purple);
+      background: rgba(124, 58, 237, 0.36);
+      color: #c4b5fd;
     }
 
     .seg-btn.active[data-mode="reduce"] {
-      color: #4f46e5;
+      background: rgba(79, 70, 229, 0.4);
+      color: #a5b4fc;
     }
 
     /* Preset Button Grid */
@@ -555,7 +725,7 @@
       font-size: 0.8rem;
       font-weight: 500;
       color: var(--text-primary);
-      background: var(--bg-canvas);
+      background: rgba(20, 31, 61, 0.62);
       border: 1px solid var(--border-strong);
       border-radius: var(--radius-sm);
       cursor: pointer;
@@ -564,19 +734,191 @@
     }
 
     .preset-btn:hover {
-      border-color: var(--accent-blue);
+      border-color: var(--accent-blue-hover);
       background: var(--accent-blue-soft);
     }
 
     .preset-btn.active {
-      color: #ffffff;
-      background: var(--accent-blue);
-      border-color: var(--accent-blue);
+      color: #f8fafc;
+      background: rgba(37, 99, 235, 0.72);
+      border-color: rgba(96, 165, 250, 0.8);
     }
 
     .preset-btn.active.purple {
-      background: var(--accent-purple);
-      border-color: var(--accent-purple);
+      background: rgba(124, 58, 237, 0.72);
+      border-color: rgba(167, 139, 250, 0.8);
+    }
+
+    .preset-btn.custom-trigger {
+      border-style: dashed;
+      border-color: rgba(96, 165, 250, 0.45);
+      color: #93c5fd;
+      background: rgba(15, 28, 58, 0.52);
+    }
+
+    .preset-btn.custom-trigger:hover,
+    .preset-btn.custom-trigger.active {
+      border-style: solid;
+      color: #f8fafc;
+    }
+
+    .preset-btn.custom-trigger.purple-trigger {
+      border-color: rgba(167, 139, 250, 0.48);
+      color: #c4b5fd;
+    }
+
+    .custom-preset-item {
+      display: inline-flex;
+      align-items: stretch;
+    }
+
+    .custom-preset-item .preset-btn {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      border-right: none;
+    }
+
+    .custom-preset-del {
+      padding: 0 9px;
+      min-height: 38px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #94a3b8;
+      background: rgba(20, 31, 61, 0.72);
+      border: 1px solid var(--border-strong);
+      border-left: 1px solid rgba(148, 163, 184, 0.22);
+      border-top-right-radius: var(--radius-sm);
+      border-bottom-right-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.16s var(--ease-out);
+    }
+
+    .custom-preset-del:hover {
+      color: #fda4af;
+      background: rgba(244, 63, 94, 0.2);
+      border-color: rgba(244, 63, 94, 0.55);
+    }
+
+    .custom-builder {
+      margin-top: 10px;
+      padding: 10px 12px;
+      background: rgba(9, 17, 38, 0.78);
+      border: 1px solid rgba(148, 163, 184, 0.24);
+      border-radius: var(--radius-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .custom-builder[hidden] {
+      display: none;
+    }
+
+    .custom-builder-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .custom-field,
+    .custom-num-field {
+      min-height: 36px;
+      padding: 6px 10px;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: var(--text-primary);
+      background: rgba(15, 25, 52, 0.9);
+      border: 1px solid var(--border-strong);
+      border-radius: 6px;
+      outline: none;
+      transition: border-color 0.16s var(--ease-out);
+    }
+
+    .custom-field {
+      flex: 1;
+      min-width: 150px;
+    }
+
+    .custom-num-field {
+      width: 78px;
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .custom-field:focus,
+    .custom-num-field:focus {
+      border-color: var(--accent-blue-hover);
+    }
+
+    .cmp-op-group {
+      display: inline-flex;
+      padding: 3px;
+      gap: 3px;
+      background: rgba(15, 25, 52, 0.88);
+      border: 1px solid var(--border-strong);
+      border-radius: 6px;
+    }
+
+    .cmp-op-btn {
+      padding: 5px 10px;
+      min-height: 28px;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: transparent;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s var(--ease-out);
+    }
+
+    .cmp-op-btn:hover {
+      color: var(--text-primary);
+    }
+
+    .cmp-op-btn.active {
+      color: #f8fafc;
+      background: rgba(124, 58, 237, 0.72);
+    }
+
+    .custom-apply-btn {
+      padding: 7px 12px;
+      min-height: 36px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #f8fafc;
+      background: rgba(37, 99, 235, 0.86);
+      border: 1px solid rgba(96, 165, 250, 0.6);
+      border-radius: 6px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background-color 0.16s var(--ease-out);
+    }
+
+    .custom-apply-btn:hover {
+      background: rgba(59, 130, 246, 0.95);
+    }
+
+    .custom-apply-btn.purple {
+      background: rgba(124, 58, 237, 0.84);
+      border-color: rgba(167, 139, 250, 0.6);
+    }
+
+    .custom-apply-btn.purple:hover {
+      background: rgba(139, 92, 246, 0.95);
+    }
+
+    .custom-error {
+      font-size: 0.76rem;
+      color: #fda4af;
+      line-height: 1.35;
+    }
+
+    .custom-error[hidden] {
+      display: none;
     }
 
     /* Playback & Speed Toolbar */
@@ -616,9 +958,9 @@
     }
 
     .ctrl-btn:hover:not(:disabled) {
-      border-color: var(--accent-blue);
+      border-color: var(--accent-blue-hover);
       background: var(--accent-blue-soft);
-      color: var(--accent-blue);
+      color: #93c5fd;
     }
 
     .ctrl-btn:disabled {
@@ -629,24 +971,24 @@
     .ctrl-btn.primary {
       background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
       border-color: transparent;
-      color: #ffffff;
+      color: #f8fafc;
     }
 
     .ctrl-btn.primary:hover:not(:disabled) {
       opacity: 0.92;
-      color: #ffffff;
+      color: #f8fafc;
       background: linear-gradient(135deg, var(--accent-blue-hover), var(--accent-purple-hover));
     }
 
     .ctrl-btn.step {
       background: var(--accent-purple-soft);
       border-color: var(--accent-purple-border);
-      color: var(--accent-purple);
+      color: #c4b5fd;
     }
 
     .ctrl-btn.step:hover:not(:disabled) {
       background: var(--accent-purple);
-      color: #ffffff;
+      color: #f8fafc;
     }
 
     .speed-control {
@@ -667,7 +1009,7 @@
       font-family: var(--font-mono);
       font-size: 0.84rem;
       font-weight: 600;
-      color: var(--accent-blue);
+      color: #93c5fd;
       min-width: 46px;
       text-align: right;
     }
@@ -679,10 +1021,10 @@
     }
 
     /* ==========================================================================
-       Animated Conveyor Belt Stage
+       Realistic Industrial Conveyor Belt Simulation Stage
        ========================================================================== */
     .stage-container {
-      padding: 28px 24px;
+      padding: 24px;
       background: var(--bg-canvas);
       border-bottom: 1px solid var(--border-hairline);
     }
@@ -693,7 +1035,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      margin-bottom: 20px;
+      margin-bottom: 14px;
     }
 
     .stage-lambda-banner {
@@ -710,7 +1052,7 @@
     .stage-lambda-banner.active-step {
       background: var(--accent-purple-soft);
       border-color: var(--accent-purple);
-      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
+      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.16);
     }
 
     .stage-progress-text {
@@ -720,277 +1062,184 @@
       font-variant-numeric: tabular-nums;
     }
 
-    /* 3-Column Conveyor Layout */
-    .conveyor-stage {
+    /* High-DPI Industrial Canvas Viewport */
+    .conveyor-canvas-wrap {
+      position: relative;
+      width: 100%;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid rgba(148, 163, 184, 0.26);
+      background: #070d1c;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 16px 36px rgba(2, 6, 23, 0.48);
+    }
+
+    .conveyor-sim-canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1080 / 410;
+    }
+
+    /* Live Visual Feedback Summary Strip below Canvas */
+    .conveyor-feedback-strip {
       display: grid;
-      grid-template-columns: 1fr 1.15fr 1fr;
-      gap: 16px;
-      align-items: stretch;
-    }
-
-    .belt-zone {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-hairline);
-      border-radius: var(--radius-md);
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      min-height: 220px;
-      position: relative;
-    }
-
-    .zone-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-
-    .zone-title {
-      font-size: 0.84rem;
-      font-weight: 700;
-      color: var(--text-secondary);
-    }
-
-    .zone-count {
-      font-family: var(--font-mono);
-      font-size: 0.78rem;
-      color: var(--text-muted);
-    }
-
-    /* Animated Belt Track */
-    .belt-track-wrap {
-      position: relative;
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .belt-items {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 10px;
-      min-height: 68px;
-      padding: 12px;
-      background: var(--bg-canvas);
-      border: 1px solid var(--border-hairline);
-      border-radius: var(--radius-sm);
-    }
-
-    .belt-rail {
-      height: 10px;
-      margin-top: 8px;
-      border-radius: 5px;
-      background-color: #e2e8f0;
-      background-image: repeating-linear-gradient(
-        -55deg,
-        #cbd5e1 0px,
-        #cbd5e1 8px,
-        #e2e8f0 8px,
-        #e2e8f0 16px
-      );
-      background-size: 28px 100%;
-    }
-
-    .belt-rail.moving {
-      animation: conveyorMove 0.7s linear infinite;
-    }
-
-    @keyframes conveyorMove {
-      from { background-position: 0 0; }
-      to { background-position: 28px 0; }
-    }
-
-    /* Token / Number Crates on Belt */
-    .crate {
-      display: inline-flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-width: 46px;
-      height: 46px;
-      padding: 0 10px;
-      border-radius: var(--radius-sm);
-      font-family: var(--font-mono);
-      font-size: 1rem;
-      font-weight: 700;
-      background: #ffffff;
-      color: var(--text-primary);
-      border: 2px solid var(--border-strong);
-      box-shadow: 0 2px 4px rgba(15, 23, 42, 0.06);
-      transition: transform 0.25s var(--ease-out), opacity 0.25s var(--ease-out), border-color 0.2s, background-color 0.2s;
-    }
-
-    .crate.input-crate {
-      border-color: var(--accent-blue-border);
-      background: var(--accent-blue-soft);
-      color: var(--accent-blue-hover);
-    }
-
-    .crate.output-crate {
-      border-color: var(--state-keep-border);
-      background: var(--state-keep-bg);
-      color: var(--state-keep-text);
-      animation: popIn 0.28s var(--ease-out);
-    }
-
-    .crate.reject-crate {
-      border-color: var(--state-reject-border);
-      background: var(--state-reject-bg);
-      color: var(--state-reject-text);
-      text-decoration: line-through;
-      opacity: 0.85;
-      animation: popIn 0.28s var(--ease-out);
-    }
-
-    .crate.acc-crate {
-      min-width: 72px;
-      height: 54px;
-      font-size: 1.25rem;
-      border-color: var(--accent-purple);
-      background: var(--accent-purple-soft);
-      color: var(--accent-purple-hover);
-      animation: popIn 0.28s var(--ease-out);
-    }
-
-    @keyframes popIn {
-      0% { transform: scale(0.84) translateY(6px); opacity: 0; }
-      100% { transform: scale(1) translateY(0); opacity: 1; }
-    }
-
-    /* Center Processor Machine */
-    .processor-zone {
-      background: linear-gradient(180deg, #f8fafc 0%, #eff6ff 100%);
-      border: 1.5px solid var(--accent-blue-border);
-      border-radius: var(--radius-md);
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      min-height: 220px;
-      transition: border-color 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out);
-    }
-
-    .processor-zone.processing {
-      border-color: var(--accent-purple);
-      box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1);
-    }
-
-    .processor-chamber {
-      background: var(--bg-canvas);
-      border: 1px solid var(--border-hairline);
-      border-radius: var(--radius-sm);
-      padding: 14px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      flex-grow: 1;
-      text-align: center;
-    }
-
-    .chamber-active-row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      grid-template-columns: repeat(4, 1fr);
       gap: 12px;
-      flex-wrap: wrap;
+      margin-top: 14px;
     }
 
-    .chamber-arrow {
-      font-weight: 700;
-      color: var(--accent-purple);
-      font-size: 1.1rem;
-    }
-
-    .chamber-eval {
-      font-family: var(--font-mono);
-      font-size: 0.88rem;
-      font-weight: 600;
-      color: var(--text-primary);
-      background: var(--bg-surface);
-      padding: 6px 12px;
-      border-radius: 6px;
+    .feedback-cell {
+      padding: 11px 14px;
+      background: rgba(9, 17, 38, 0.64);
       border: 1px solid var(--border-hairline);
-    }
-
-    .verdict-tag {
-      font-size: 0.8rem;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 6px;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .verdict-keep {
-      background: var(--state-keep-bg);
-      color: var(--state-keep-text);
-      border: 1px solid var(--state-keep-border);
-    }
-
-    .verdict-reject {
-      background: var(--state-reject-bg);
-      color: var(--state-reject-text);
-      border: 1px solid var(--state-reject-border);
-    }
-
-    .verdict-transform {
-      background: var(--accent-blue-soft);
-      color: var(--accent-blue-hover);
-      border: 1px solid var(--accent-blue-border);
-    }
-
-    /* Filter Reject Chute */
-    .reject-chute {
-      margin-top: 12px;
-      padding: 10px 12px;
-      background: var(--state-reject-bg);
-      border: 1px dashed var(--state-reject-border);
       border-radius: var(--radius-sm);
-      display: none;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .reject-chute.visible {
       display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
     }
 
-    .reject-label {
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: var(--state-reject-text);
+    .feedback-label {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--text-muted);
       white-space: nowrap;
     }
 
-    .empty-slot-msg {
-      font-size: 0.85rem;
-      color: var(--text-muted);
+    .feedback-value {
+      font-family: var(--font-mono);
+      font-size: 0.86rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
     }
+
+    .feedback-value.accent-blue { color: #93c5fd; }
+    .feedback-value.accent-green { color: var(--state-keep-text); }
+    .feedback-value.accent-red { color: var(--state-reject-text); }
+    .feedback-value.accent-purple { color: #c4b5fd; }
 
     /* ==========================================================================
-       5 & 6. Code Panel & Output Panel (Split Inspection Deck)
+       5 & 6. Step-by-Step Call Simulator (Code Panel, Call Panel & Output Console)
        ========================================================================== */
-    .inspector-grid {
-      display: grid;
-      grid-template-columns: 1.05fr 0.95fr;
-      background: var(--bg-canvas);
-    }
-
-    .code-panel {
+    .call-sim-shell {
+      background: rgba(11, 17, 32, 0.88);
+      border-top: 1px solid var(--border-hairline);
       padding: 24px;
-      border-right: 1px solid var(--border-hairline);
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 20px;
+    }
+
+    .call-sim-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .call-sim-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .call-btn-play {
+      padding: 9px 18px;
+      min-height: 40px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #0f172a;
+      background: #facc15;
+      border: 1px solid #fde047;
+      border-radius: 8px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: transform 0.14s var(--ease-out), background-color 0.14s var(--ease-out), opacity 0.14s var(--ease-out);
+    }
+
+    .call-btn-play:hover:not(:disabled) {
+      background: #fde047;
+      transform: translateY(-1px);
+    }
+
+    .call-btn-play.is-playing {
+      background: #fbbf24;
+    }
+
+    .call-btn-sec {
+      padding: 9px 18px;
+      min-height: 40px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #f8fafc;
+      background: rgba(24, 34, 58, 0.78);
+      border: 1px solid rgba(148, 163, 184, 0.28);
+      border-radius: 8px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.14s var(--ease-out);
+    }
+
+    .call-btn-sec:hover:not(:disabled) {
+      background: rgba(38, 52, 86, 0.86);
+      border-color: rgba(148, 163, 184, 0.45);
+    }
+
+    .call-btn-play:disabled,
+    .call-btn-sec:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .call-sim-speed {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .call-speed-label {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #f8fafc;
+      white-space: nowrap;
+    }
+
+    .call-speed-slider {
+      width: 132px;
+      accent-color: #facc15;
+      cursor: pointer;
+    }
+
+    .call-speed-val {
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #facc15;
+      min-width: 48px;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .call-sim-grid {
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .call-left-col,
+    .call-right-col {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      min-width: 0;
     }
 
     .panel-title-row {
@@ -1001,123 +1250,171 @@
     }
 
     .panel-title {
-      font-size: 1.05rem;
+      font-size: 1.02rem;
       font-weight: 700;
-      color: var(--text-primary);
+      color: #f8fafc;
     }
 
     .panel-subtitle {
       font-size: 0.82rem;
-      color: var(--text-muted);
+      color: #94a3b8;
     }
 
     .code-window {
-      background: var(--bg-code);
-      border-radius: var(--radius-md);
-      padding: 16px 0;
+      background: #050914;
+      border-radius: 12px;
+      padding: 14px 0;
       overflow-x: auto;
-      border: 1px solid #1e293b;
+      border: 1px solid rgba(148, 163, 184, 0.22);
     }
 
     .code-line {
       display: flex;
       align-items: baseline;
-      gap: 14px;
-      padding: 4px 18px;
+      gap: 10px;
+      padding: 4px 16px;
       font-family: var(--font-mono);
-      font-size: 0.84rem;
-      line-height: 1.65;
-      color: #cbd5e1;
+      font-size: 0.86rem;
+      line-height: 1.72;
+      color: #e2e8f0;
       transition: background-color 0.18s var(--ease-out);
       white-space: pre;
     }
 
     .code-line.active-line {
-      background: rgba(124, 58, 237, 0.28);
-      color: #ffffff;
-      box-shadow: inset 3px 0 0 #a78bfa;
+      background: rgba(234, 179, 8, 0.15);
+      box-shadow: inset 3px 0 0 #facc15;
     }
 
     .line-num {
       color: #64748b;
       user-select: none;
-      min-width: 18px;
+      min-width: 16px;
       text-align: right;
-      font-size: 0.78rem;
+      font-size: 0.8rem;
+    }
+
+    .line-arrow {
+      width: 14px;
+      text-align: center;
+      color: #facc15;
+      font-weight: 700;
+      user-select: none;
+      flex-shrink: 0;
     }
 
     .code-line.active-line .line-num {
-      color: #c4b5fd;
+      color: #cbd5e1;
       font-weight: 700;
     }
 
-    /* Output & Trace Panel */
-    .output-panel {
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
+    .tok-kw { color: #60a5fa; font-weight: 600; }
+    .tok-fn { color: #facc15; font-weight: 600; }
+    .tok-num { color: #38bdf8; }
+    .tok-op { color: #cbd5e1; }
+    .tok-cmt { color: #64748b; }
 
-    .output-result-box {
-      padding: 16px;
-      background: var(--bg-surface);
-      border: 1px solid var(--border-hairline);
-      border-radius: var(--radius-md);
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .output-result-label {
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: var(--text-secondary);
-    }
-
-    .output-result-value {
-      font-family: var(--font-mono);
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--accent-blue);
-      word-break: break-word;
-    }
-
-    .output-explanation {
-      font-size: 0.92rem;
-      color: var(--text-secondary);
-    }
-
-    .trace-list {
-      list-style: none;
-      margin: 0;
-      padding: 0;
+    .step-explain-card {
+      padding: 16px 18px;
+      background: rgba(9, 14, 28, 0.82);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 12px;
       display: flex;
       flex-direction: column;
       gap: 6px;
-      max-height: 180px;
-      overflow-y: auto;
     }
 
-    .trace-item {
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      padding: 7px 11px;
-      background: var(--bg-surface);
-      border: 1px solid var(--border-hairline);
-      border-radius: 6px;
-      color: var(--text-primary);
+    .step-explain-title {
+      font-size: 0.94rem;
+      font-weight: 700;
+      color: #facc15;
+    }
+
+    .step-explain-body {
+      font-size: 0.9rem;
+      color: #cbd5e1;
+      line-height: 1.55;
+    }
+
+    .hl-gold { color: #facc15; font-family: var(--font-mono); font-weight: 600; }
+    .hl-cyan { color: #38bdf8; font-family: var(--font-mono); font-weight: 600; }
+    .hl-green { color: #34d399; font-family: var(--font-mono); font-weight: 600; }
+
+    .call-panel-card,
+    .console-panel-card {
+      padding: 18px;
+      background: rgba(11, 17, 32, 0.68);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 12px;
       display: flex;
-      align-items: center;
-      justify-content: space-between;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .call-vars-list {
+      display: flex;
+      flex-direction: column;
       gap: 10px;
     }
 
-    .trace-item.current {
-      background: var(--accent-purple-soft);
-      border-color: var(--accent-purple-border);
-      color: var(--accent-purple-hover);
+    .call-var-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 11px 14px;
+      background: rgba(7, 11, 22, 0.75);
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      border-radius: 10px;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+    }
+
+    .call-var-key {
+      color: #cbd5e1;
+      white-space: nowrap;
+    }
+
+    .call-var-val {
+      font-weight: 700;
+      text-align: right;
+      word-break: break-word;
+    }
+
+    .call-var-val.white { color: #f8fafc; }
+    .call-var-val.cyan { color: #38bdf8; }
+    .call-var-val.gold { color: #facc15; }
+    .call-var-val.green { color: #34d399; }
+
+    .console-title {
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
       font-weight: 600;
+      color: #94a3b8;
+    }
+
+    .console-box {
+      padding: 14px 16px;
+      background: #050914;
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      border-radius: 10px;
+      font-family: var(--font-mono);
+      font-size: 0.86rem;
+      line-height: 1.72;
+      overflow-x: auto;
+    }
+
+    .console-cmd {
+      color: #cbd5e1;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .console-out {
+      color: #facc15;
+      font-weight: 700;
+      margin-top: 2px;
+      word-break: break-word;
     }
 
     /* ==========================================================================
@@ -1137,17 +1434,18 @@
     }
 
     .quiz-card {
-      background: var(--bg-canvas);
-      border: 1px solid var(--border-hairline);
+      background: rgba(15, 25, 52, 0.58);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(148, 163, 184, 0.22);
       border-radius: var(--radius-lg);
       padding: 24px;
-      box-shadow: var(--shadow-card);
+      box-shadow: 0 12px 30px rgba(2, 6, 23, 0.36);
     }
 
     .quiz-q-meta {
       font-size: 0.8rem;
       font-weight: 600;
-      color: var(--accent-purple);
+      color: var(--accent-purple-hover);
       margin-bottom: 6px;
     }
 
@@ -1166,7 +1464,7 @@
       border: 1px solid var(--border-hairline);
       padding: 2px 7px;
       border-radius: 5px;
-      color: var(--accent-blue-hover);
+      color: #93c5fd;
     }
 
     .quiz-options {
@@ -1182,7 +1480,7 @@
       font-size: 0.9rem;
       font-weight: 500;
       color: var(--text-primary);
-      background: var(--bg-surface);
+      background: rgba(10, 18, 38, 0.62);
       border: 1px solid var(--border-hairline);
       border-radius: var(--radius-sm);
       cursor: pointer;
@@ -1193,7 +1491,7 @@
     }
 
     .quiz-opt-btn:hover:not(:disabled) {
-      border-color: var(--accent-blue);
+      border-color: var(--accent-blue-hover);
       background: var(--accent-blue-soft);
     }
 
@@ -1249,11 +1547,12 @@
     .quiz-sidebar {
       position: sticky;
       top: 92px;
-      background: var(--bg-canvas);
-      border: 1px solid var(--border-hairline);
+      background: rgba(15, 25, 52, 0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(148, 163, 184, 0.22);
       border-radius: var(--radius-lg);
       padding: 24px;
-      box-shadow: var(--shadow-card);
+      box-shadow: 0 12px 30px rgba(2, 6, 23, 0.36);
       display: flex;
       flex-direction: column;
       gap: 16px;
@@ -1263,14 +1562,14 @@
       font-family: var(--font-display);
       font-size: 2.35rem;
       font-weight: 700;
-      color: var(--accent-blue);
+      color: #93c5fd;
       font-variant-numeric: tabular-nums;
     }
 
     .score-bar-bg {
       width: 100%;
       height: 8px;
-      background: #e2e8f0;
+      background: rgba(30, 41, 59, 0.72);
       border-radius: 4px;
       overflow: hidden;
     }
@@ -1284,11 +1583,14 @@
 
     /* Footer */
     .site-footer {
+      position: relative;
+      z-index: 2;
       padding: 28px 0;
-      border-top: 1px solid var(--border-hairline);
-      background: var(--bg-canvas);
+      border-top: 1px solid rgba(148, 163, 184, 0.18);
+      background: rgba(4, 9, 22, 0.88);
+      backdrop-filter: blur(8px);
       font-size: 0.875rem;
-      color: var(--text-muted);
+      color: #94a3b8;
     }
 
     .footer-inner {
@@ -1309,15 +1611,11 @@
       .control-row {
         grid-template-columns: 1fr;
       }
-      .conveyor-stage {
-        grid-template-columns: 1fr;
+      .conveyor-feedback-strip {
+        grid-template-columns: repeat(2, 1fr);
       }
-      .inspector-grid {
+      .call-sim-grid {
         grid-template-columns: 1fr;
-      }
-      .code-panel {
-        border-right: none;
-        border-bottom: 1px solid var(--border-hairline);
       }
       .quiz-shell {
         grid-template-columns: 1fr;
@@ -1353,6 +1651,68 @@
   </style>
 </head>
 <body>
+  <!-- Fixed 3D Python-Themed Background Layer -->
+  <div class="python-3d-bg" aria-hidden="true">
+    <div class="bg-3d-scene">
+      <div class="bg-3d-grid"></div>
+
+      <!-- Glowing Ambient Particles -->
+      <div class="bg-particles">
+        <span class="bg-particle" style="width:7px;height:7px;top:14%;left:8%;--dx:18px;--dy:-42px;--dur:13s;--delay:-2s;"></span>
+        <span class="bg-particle gold" style="width:6px;height:6px;top:24%;left:22%;--dx:-14px;--dy:-52px;--dur:16s;--delay:-5s;"></span>
+        <span class="bg-particle purple" style="width:8px;height:8px;top:12%;left:76%;--dx:22px;--dy:-38px;--dur:15s;--delay:-1s;"></span>
+        <span class="bg-particle" style="width:5px;height:5px;top:36%;left:90%;--dx:-20px;--dy:-48px;--dur:14s;--delay:-7s;"></span>
+        <span class="bg-particle gold" style="width:7px;height:7px;top:52%;left:12%;--dx:16px;--dy:-40px;--dur:17s;--delay:-3s;"></span>
+        <span class="bg-particle" style="width:9px;height:9px;top:64%;left:84%;--dx:-18px;--dy:-54px;--dur:12s;--delay:-6s;"></span>
+        <span class="bg-particle purple" style="width:6px;height:6px;top:78%;left:26%;--dx:14px;--dy:-44px;--dur:15s;--delay:-9s;"></span>
+        <span class="bg-particle gold" style="width:5px;height:5px;top:82%;left:68%;--dx:-16px;--dy:-36px;--dur:14s;--delay:-4s;"></span>
+        <span class="bg-particle" style="width:6px;height:6px;top:44%;left:48%;--dx:12px;--dy:-30px;--dur:18s;--delay:-8s;"></span>
+        <span class="bg-particle purple" style="width:8px;height:8px;top:28%;left:60%;--dx:-14px;--dy:-46px;--dur:16s;--delay:-11s;"></span>
+        <span class="bg-particle" style="width:5px;height:5px;top:90%;left:42%;--dx:20px;--dy:-50px;--dur:13s;--delay:-2s;"></span>
+        <span class="bg-particle gold" style="width:7px;height:7px;top:18%;left:44%;--dx:-12px;--dy:-36px;--dur:19s;--delay:-10s;"></span>
+      </div>
+
+      <!-- Floating 3D Python Logos -->
+      <div class="floating-py-logo" style="top:11%;left:4%;width:92px;height:92px;--z:20px;--dx:14px;--dy:-24px;--dur:21s;--delay:-2s;">
+        <svg viewBox="0 0 110 110" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M54.5 9C30.8 9 32.3 19.3 32.3 19.3l.03 10.6h22.6v3.2H23.4S8.2 31.4 8.2 55.4c0 24 13.3 23.1 13.3 23.1h7.9V67.4s-.4-13.3 13.1-13.3h22.4s12.6.2 12.6-12.2V21.5S79.4 9 54.5 9Zm-12.4 7.2a4.1 4.1 0 1 1 0 8.2 4.1 4.1 0 0 1 0-8.2Z" fill="#3776AB" fill-opacity="0.88"/>
+          <path d="M55.5 101c23.7 0 22.2-10.3 22.2-10.3l-.03-10.6H55.1v-3.2h31.5s15.2 1.7 15.2-22.3c0-24-13.3-23.1-13.3-23.1h-7.9v11.1s.4 13.3-13.1 13.3H45.1s-12.6-.2-12.6 12.2v20.4S30.6 101 55.5 101Zm12.4-7.2a4.1 4.1 0 1 1 0-8.2 4.1 4.1 0 0 1 0 8.2Z" fill="#FFD43B" fill-opacity="0.88"/>
+        </svg>
+      </div>
+
+      <div class="floating-py-logo" style="top:46%;right:3%;width:108px;height:108px;--z:35px;--dx:-18px;--dy:-28px;--dur:24s;--delay:-7s;">
+        <svg viewBox="0 0 110 110" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M54.5 9C30.8 9 32.3 19.3 32.3 19.3l.03 10.6h22.6v3.2H23.4S8.2 31.4 8.2 55.4c0 24 13.3 23.1 13.3 23.1h7.9V67.4s-.4-13.3 13.1-13.3h22.4s12.6.2 12.6-12.2V21.5S79.4 9 54.5 9Zm-12.4 7.2a4.1 4.1 0 1 1 0 8.2 4.1 4.1 0 0 1 0-8.2Z" fill="#60A5FA" fill-opacity="0.82"/>
+          <path d="M55.5 101c23.7 0 22.2-10.3 22.2-10.3l-.03-10.6H55.1v-3.2h31.5s15.2 1.7 15.2-22.3c0-24-13.3-23.1-13.3-23.1h-7.9v11.1s.4 13.3-13.1 13.3H45.1s-12.6-.2-12.6 12.2v20.4S30.6 101 55.5 101Zm12.4-7.2a4.1 4.1 0 1 1 0-8.2 4.1 4.1 0 0 1 0 8.2Z" fill="#FACC15" fill-opacity="0.82"/>
+        </svg>
+      </div>
+
+      <div class="floating-py-logo" style="bottom:14%;left:5%;width:76px;height:76px;--z:-10px;--dx:14px;--dy:-18px;--dur:19s;--delay:-11s;">
+        <svg viewBox="0 0 110 110" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M54.5 9C30.8 9 32.3 19.3 32.3 19.3l.03 10.6h22.6v3.2H23.4S8.2 31.4 8.2 55.4c0 24 13.3 23.1 13.3 23.1h7.9V67.4s-.4-13.3 13.1-13.3h22.4s12.6.2 12.6-12.2V21.5S79.4 9 54.5 9Zm-12.4 7.2a4.1 4.1 0 1 1 0 8.2 4.1 4.1 0 0 1 0-8.2Z" fill="#3776AB" fill-opacity="0.75"/>
+          <path d="M55.5 101c23.7 0 22.2-10.3 22.2-10.3l-.03-10.6H55.1v-3.2h31.5s15.2 1.7 15.2-22.3c0-24-13.3-23.1-13.3-23.1h-7.9v11.1s.4 13.3-13.1 13.3H45.1s-12.6-.2-12.6 12.2v20.4S30.6 101 55.5 101Zm12.4-7.2a4.1 4.1 0 1 1 0-8.2 4.1 4.1 0 0 1 0 8.2Z" fill="#FFD43B" fill-opacity="0.75"/>
+        </svg>
+      </div>
+
+      <!-- Floating 3D Python Code Elements -->
+      <div class="floating-code-3d" style="top:16%;right:7%;--z:15px;--ry:-16deg;--dx:-16px;--dy:-22px;--dur:17s;--delay:-3s;">
+        <span class="py-kw">lambda</span> x: x * <span class="py-gold">2</span>
+      </div>
+      <div class="floating-code-3d" style="top:34%;left:2%;--z:25px;--ry:18deg;--dx:18px;--dy:-20px;--dur:22s;--delay:-6s;">
+        <span class="py-purp">map</span>(<span class="py-kw">lambda</span> x: x + <span class="py-gold">5</span>, nums)
+      </div>
+      <div class="floating-code-3d" style="top:68%;right:6%;--z:10px;--ry:-14deg;--dx:-14px;--dy:-26px;--dur:20s;--delay:-9s;">
+        <span class="py-purp">filter</span>(<span class="py-kw">lambda</span> x: x &gt; <span class="py-gold">4</span>, nums)
+      </div>
+      <div class="floating-code-3d" style="bottom:8%;right:22%;--z:5px;--ry:12deg;--dx:12px;--dy:-18px;--dur:23s;--delay:-4s;">
+        <span class="py-purp">reduce</span>(<span class="py-kw">lambda</span> a, x: a + x, seq)
+      </div>
+      <div class="floating-code-3d" style="top:54%;left:18%;--z:-20px;--ry:14deg;--dx:10px;--dy:-22px;--dur:25s;--delay:-12s;">
+        <span class="py-kw">from</span> functools <span class="py-kw">import</span> <span class="py-gold">reduce</span>
+      </div>
+    </div>
+  </div>
+
   <!-- Top Bar (3-Zone Contract) -->
   <header class="site-header">
     <div class="container header-inner">
@@ -1367,7 +1727,7 @@
     </div>
   </header>
 
-  <main id="top">
+  <main id="top" class="main-dashboard">
     <!-- Hero Introduction -->
     <section class="hero-section">
       <div class="container hero-grid">
@@ -1496,12 +1856,45 @@
               <div>
                 <span class="control-group-label">2. Preset Input List</span>
                 <div id="input-presets" class="preset-group"></div>
+                <div id="custom-input-builder" class="custom-builder" hidden>
+                  <div class="custom-builder-row">
+                    <input
+                      type="text"
+                      id="custom-input-field"
+                      class="custom-field"
+                      placeholder="e.g. 2, 7, 4, 9, 1"
+                      aria-label="Custom preset numbers separated by commas"
+                    />
+                    <button type="button" id="btn-add-custom-input" class="custom-apply-btn">Add &amp; Run</button>
+                  </div>
+                  <div id="custom-input-error" class="custom-error" hidden></div>
+                </div>
               </div>
 
               <!-- Lambda Presets -->
               <div>
                 <span class="control-group-label" id="lambda-preset-label">3. Lambda Operation Preset</span>
                 <div id="lambda-presets" class="preset-group"></div>
+                <div id="custom-lambda-builder" class="custom-builder" hidden>
+                  <div class="custom-builder-row">
+                    <div class="cmp-op-group" role="group" aria-label="Comparison operator">
+                      <button type="button" class="cmp-op-btn active" data-cmp-op="<" title="Less than">&lt; Less</button>
+                      <button type="button" class="cmp-op-btn" data-cmp-op=">" title="Greater than">&gt; Greater</button>
+                    </div>
+                    <input
+                      type="number"
+                      id="custom-cmp-value"
+                      class="custom-num-field"
+                      min="-99"
+                      max="999"
+                      step="1"
+                      value="5"
+                      aria-label="Comparison threshold number"
+                    />
+                    <button type="button" id="btn-apply-custom-lambda" class="custom-apply-btn purple">Apply</button>
+                  </div>
+                  <div id="custom-lambda-error" class="custom-error" hidden></div>
+                </div>
               </div>
             </div>
 
@@ -1523,8 +1916,8 @@
             </div>
           </div>
 
-          <!-- Animated Conveyor Belt Canvas -->
-          <div class="stage-container">
+          <!-- Realistic Industrial Conveyor Belt Simulation Stage -->
+          <div id="stage-container" class="stage-container">
             <div class="stage-top-meta">
               <div id="active-lambda-banner" class="stage-lambda-banner">
                 <span>Active Lambda:</span>
@@ -1535,79 +1928,101 @@
               </div>
             </div>
 
-            <div class="conveyor-stage">
-              <!-- Input Queue Belt -->
-              <div class="belt-zone">
-                <div class="zone-header">
-                  <span class="zone-title">Input Belt (Waiting)</span>
-                  <span id="input-count" class="zone-count">5 items</span>
-                </div>
-                <div class="belt-track-wrap">
-                  <div id="input-belt-items" class="belt-items"></div>
-                  <div id="rail-input" class="belt-rail"></div>
-                </div>
-              </div>
+            <!-- Industrial Conveyor Belt & Processing Machine Canvas -->
+            <div class="conveyor-canvas-wrap">
+              <canvas id="conveyor-sim-canvas" class="conveyor-sim-canvas" role="img" aria-label="Industrial conveyor belt simulation processing numbered blocks through map, filter, or reduce"></canvas>
+            </div>
 
-              <!-- Center Lambda Processing Gate -->
-              <div id="processor-zone" class="processor-zone">
-                <div class="zone-header">
-                  <span class="zone-title" id="processor-title">Lambda Station · Map</span>
-                  <span id="processor-status" class="zone-count">Idle</span>
-                </div>
-                <div class="processor-chamber" id="processor-chamber">
-                  <p class="empty-slot-msg">Press <strong>Process</strong>, <strong>Play</strong>, or <strong>Next Step</strong> to feed the first number into the lambda gate.</p>
-                </div>
+            <!-- Synchronized Visual Feedback Strip -->
+            <div class="conveyor-feedback-strip" aria-live="polite">
+              <div class="feedback-cell">
+                <span class="feedback-label">Input Queue</span>
+                <span id="fb-input-queue" class="feedback-value accent-blue">[1, 2, 3, 4, 5]</span>
               </div>
-
-              <!-- Output Belt / Accumulator -->
-              <div class="belt-zone">
-                <div class="zone-header">
-                  <span class="zone-title" id="output-zone-title">Output Belt (Result)</span>
-                  <span id="output-count" class="zone-count">0 items</span>
-                </div>
-                <div class="belt-track-wrap">
-                  <div id="output-belt-items" class="belt-items"></div>
-                  <div id="rail-output" class="belt-rail"></div>
-                </div>
-                <div id="reject-chute" class="reject-chute">
-                  <span class="reject-label">Rejected:</span>
-                  <div id="reject-items" class="preset-group"></div>
-                </div>
+              <div class="feedback-cell">
+                <span class="feedback-label">Current Processing</span>
+                <span id="fb-current-item" class="feedback-value accent-purple">Idle</span>
+              </div>
+              <div class="feedback-cell">
+                <span id="fb-output-label" class="feedback-label">Output Result</span>
+                <span id="fb-output-result" class="feedback-value accent-green">[ ]</span>
+              </div>
+              <div class="feedback-cell">
+                <span id="fb-status-label" class="feedback-label">Processing Status</span>
+                <span id="fb-status-val" class="feedback-value">Idle · Waiting</span>
               </div>
             </div>
           </div>
 
-          <!-- 5 & 6. Code Panel & Output Explanation Panel -->
-          <div id="code-inspector" class="inspector-grid">
-            <!-- Python Code Panel -->
-            <div class="code-panel">
-              <div class="panel-title-row">
-                <h3 class="panel-title">Python Code Execution</h3>
-                <span id="code-phase-label" class="panel-subtitle">Line 1 · Input defined</span>
+          <!-- 5 & 6. Step-by-Step Call Simulator -->
+          <div id="code-inspector" class="call-sim-shell">
+            <div class="call-sim-toolbar">
+              <div class="call-sim-actions">
+                <button type="button" id="call-btn-play" class="call-btn-play">Play</button>
+                <button type="button" id="call-btn-next" class="call-btn-sec">Next</button>
+                <button type="button" id="call-btn-reset" class="call-btn-sec">Reset</button>
               </div>
-              <div id="code-window" class="code-window" role="region" aria-label="Python code with active line highlight"></div>
+              <div class="call-sim-speed">
+                <label for="call-speed-slider" class="call-speed-label">Animation speed:</label>
+                <input type="range" id="call-speed-slider" class="call-speed-slider" min="0.5" max="2.5" step="0.25" value="1" />
+                <span id="call-speed-display" class="call-speed-val">1.00x</span>
+              </div>
             </div>
 
-            <!-- Output & Intermediate Result Panel -->
-            <div class="output-panel">
-              <div class="panel-title-row">
-                <h3 class="panel-title">Output &amp; Step Trace</h3>
-                <span id="output-state-label" class="panel-subtitle">Waiting to start</span>
+            <div class="call-sim-grid">
+              <!-- Left: Code Panel & Active Step Explanation -->
+              <div class="call-left-col">
+                <div class="panel-title-row">
+                  <h3 class="panel-title">Code Panel</h3>
+                  <span id="code-phase-label" class="panel-subtitle">Step 0 of 5 · Ready</span>
+                </div>
+                <div id="code-window" class="code-window" role="region" aria-label="Python code with active line highlight"></div>
+                <div class="step-explain-card">
+                  <div id="step-explain-title" class="step-explain-title">1. Preparing the call</div>
+                  <div id="result-explanation" class="step-explain-body">
+                    Ready to trace each call step by step.
+                  </div>
+                </div>
               </div>
 
-              <div class="output-result-box">
-                <span id="result-box-label" class="output-result-label">Intermediate Result</span>
-                <div id="result-box-value" class="output-result-value">[ ]</div>
-                <p id="result-explanation" class="output-explanation">
-                  Select any preset above and step through the belt to inspect how each item is transformed or tested.
-                </p>
-              </div>
+              <!-- Right: Call Panel & Output Console -->
+              <div class="call-right-col">
+                <div class="call-panel-card">
+                  <div class="panel-title-row">
+                    <h3 class="panel-title">Call Panel</h3>
+                    <span id="output-state-label" class="panel-subtitle">Local variables</span>
+                  </div>
+                  <div class="call-vars-list">
+                    <div class="call-var-row">
+                      <span class="call-var-key">Function called</span>
+                      <span id="call-fn-val" class="call-var-val white">Pending</span>
+                    </div>
+                    <div class="call-var-row">
+                      <span class="call-var-key">Parameter <span id="call-param-name" class="hl-gold">x</span></span>
+                      <span id="call-param-val" class="call-var-val cyan">&mdash;</span>
+                    </div>
+                    <div class="call-var-row">
+                      <span class="call-var-key">Local <span id="call-local-name" class="hl-gold">result</span></span>
+                      <span id="call-local-val" class="call-var-val gold">&mdash;</span>
+                    </div>
+                    <div class="call-var-row">
+                      <span class="call-var-key">Returned value</span>
+                      <span id="call-return-val" class="call-var-val green">&mdash;</span>
+                    </div>
+                  </div>
+                </div>
 
-              <div>
-                <span class="control-group-label">Step-by-Step Execution Log</span>
-                <ul id="trace-list" class="trace-list">
-                  <li class="trace-item">No items processed yet. Click Next Step or Play.</li>
-                </ul>
+                <div class="console-panel-card">
+                  <div class="panel-title-row">
+                    <span class="console-title">Output Console</span>
+                    <span id="console-return-type" class="panel-subtitle">Pending</span>
+                  </div>
+                  <div class="console-box" aria-live="polite">
+                    <div id="console-cmd-1" class="console-cmd">&gt;&gt;&gt; result = list(map(apply_fn, [1, 2, 3, 4, 5]))</div>
+                    <div id="console-cmd-2" class="console-cmd">&gt;&gt;&gt; result</div>
+                    <div id="console-out-val" class="console-out">[ ]</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -1840,16 +2255,20 @@
         mode: "map",                 // "map" | "filter" | "reduce"
         inputPresetId: "seq5",
         lambdaPresetId: "double",
-        stepIndex: 0,                // Number of items processed so far (0..N)
+        stepIndex: 0,                // Number of preset list items processed so far (0..N)
         isPlaying: false,
         speedMultiplier: 1.0,
-        timerId: null,
         outputItems: [],             // Used for map & filter
         rejectedItems: [],           // Used for filter
         accumulator: null,           // Used for reduce
         currentStepDetail: null,     // Snapshot of the most recent processed item
         traceLogs: [],
-        quizAnswers: {}              // { questionId: selectedIndex }
+        quizAnswers: {},             // { questionId: selectedIndex }
+        showCustomInputBuilder: false,
+        customInputCounter: 1,
+        showCustomLambdaBuilder: false,
+        customFilterOp: "<",         // "<" | ">"
+        customFilterValue: 5
       };
 
       // ------------------------------------------------------------------------
@@ -1859,7 +2278,16 @@
         modeButtons: document.querySelectorAll(".seg-btn"),
         jumpButtons: document.querySelectorAll("[data-jump-mode]"),
         inputPresetsWrap: document.getElementById("input-presets"),
+        customInputBuilder: document.getElementById("custom-input-builder"),
+        customInputField: document.getElementById("custom-input-field"),
+        btnAddCustomInput: document.getElementById("btn-add-custom-input"),
+        customInputError: document.getElementById("custom-input-error"),
         lambdaPresetsWrap: document.getElementById("lambda-presets"),
+        customLambdaBuilder: document.getElementById("custom-lambda-builder"),
+        cmpOpButtons: document.querySelectorAll("[data-cmp-op]"),
+        customCmpValue: document.getElementById("custom-cmp-value"),
+        btnApplyCustomLambda: document.getElementById("btn-apply-custom-lambda"),
+        customLambdaError: document.getElementById("custom-lambda-error"),
         btnProcess: document.getElementById("btn-process"),
         btnPlay: document.getElementById("btn-play"),
         btnPause: document.getElementById("btn-pause"),
@@ -1868,30 +2296,40 @@
         speedSlider: document.getElementById("speed-slider"),
         speedDisplay: document.getElementById("speed-display"),
 
+        stageContainer: document.getElementById("stage-container"),
+
         activeLambdaBanner: document.getElementById("active-lambda-banner"),
         activeLambdaCode: document.getElementById("active-lambda-code"),
         stageProgressText: document.getElementById("stage-progress-text"),
-        inputCount: document.getElementById("input-count"),
-        inputBeltItems: document.getElementById("input-belt-items"),
-        railInput: document.getElementById("rail-input"),
-        processorZone: document.getElementById("processor-zone"),
-        processorTitle: document.getElementById("processor-title"),
-        processorStatus: document.getElementById("processor-status"),
-        processorChamber: document.getElementById("processor-chamber"),
-        outputZoneTitle: document.getElementById("output-zone-title"),
-        outputCount: document.getElementById("output-count"),
-        outputBeltItems: document.getElementById("output-belt-items"),
-        railOutput: document.getElementById("rail-output"),
-        rejectChute: document.getElementById("reject-chute"),
-        rejectItems: document.getElementById("reject-items"),
+        canvas: document.getElementById("conveyor-sim-canvas"),
+        fbInputQueue: document.getElementById("fb-input-queue"),
+        fbCurrentItem: document.getElementById("fb-current-item"),
+        fbOutputLabel: document.getElementById("fb-output-label"),
+        fbOutputResult: document.getElementById("fb-output-result"),
+        fbStatusLabel: document.getElementById("fb-status-label"),
+        fbStatusVal: document.getElementById("fb-status-val"),
+
+        callBtnPlay: document.getElementById("call-btn-play"),
+        callBtnNext: document.getElementById("call-btn-next"),
+        callBtnReset: document.getElementById("call-btn-reset"),
+        callSpeedSlider: document.getElementById("call-speed-slider"),
+        callSpeedDisplay: document.getElementById("call-speed-display"),
 
         codeWindow: document.getElementById("code-window"),
         codePhaseLabel: document.getElementById("code-phase-label"),
-        outputStateLabel: document.getElementById("output-state-label"),
-        resultBoxLabel: document.getElementById("result-box-label"),
-        resultBoxValue: document.getElementById("result-box-value"),
+        stepExplainTitle: document.getElementById("step-explain-title"),
         resultExplanation: document.getElementById("result-explanation"),
-        traceList: document.getElementById("trace-list"),
+        outputStateLabel: document.getElementById("output-state-label"),
+        callFnVal: document.getElementById("call-fn-val"),
+        callParamName: document.getElementById("call-param-name"),
+        callParamVal: document.getElementById("call-param-val"),
+        callLocalName: document.getElementById("call-local-name"),
+        callLocalVal: document.getElementById("call-local-val"),
+        callReturnVal: document.getElementById("call-return-val"),
+        consoleReturnType: document.getElementById("console-return-type"),
+        consoleCmd1: document.getElementById("console-cmd-1"),
+        consoleCmd2: document.getElementById("console-cmd-2"),
+        consoleOutVal: document.getElementById("console-out-val"),
 
         quizQuestions: document.getElementById("quiz-questions"),
         quizScoreDisplay: document.getElementById("quiz-score-display"),
@@ -1912,60 +2350,132 @@
         return OPERATIONS[state.mode];
       }
 
+      function buildCustomFilterPreset() {
+        var op = state.customFilterOp === "<" ? "<" : ">";
+        var threshold = state.customFilterValue;
+        return {
+          id: "custom-cmp",
+          label: "x " + op + " " + threshold,
+          lambdaText: "lambda x: x " + op + " " + threshold,
+          explainRule: op === "<"
+            ? "keeps only numbers strictly less than " + threshold
+            : "keeps only numbers strictly greater than " + threshold,
+          fn: op === "<"
+            ? function (x) { return x < threshold; }
+            : function (x) { return x > threshold; },
+          describeStep: function (x, pass) {
+            return x + " " + op + " " + threshold + " is " + (pass ? "True (Kept)" : "False (Rejected)");
+          }
+        };
+      }
+
       function getCurrentLambdaPreset() {
+        if (state.mode === "filter" && state.lambdaPresetId === "custom-cmp") {
+          return buildCustomFilterPreset();
+        }
         var op = getCurrentOperation();
         return op.presets.find(function (p) { return p.id === state.lambdaPresetId; }) || op.presets[0];
       }
 
-      function getStepDelayMs() {
-        // Base delay 1100ms divided by speed slider (0.5x -> 2200ms, 2.5x -> 440ms)
-        return Math.round(1100 / state.speedMultiplier);
+      // ------------------------------------------------------------------------
+      // 6. Industrial Conveyor Physics & JavaScript Logic Synchronization
+      // ------------------------------------------------------------------------
+      var SCENE_W = 1080;
+      var SCENE_H = 410;
+      var BELT_Y = 232;
+      var BELT_LEFT = 54;
+      var BELT_RIGHT = 1026;
+      var FLOOR_Y = 354;
+      var ROLLER_R = 12;
+      var MACHINE_X1 = 378;
+      var MACHINE_X2 = 702;
+      var MACHINE_CX = 540;
+      var INPUT_FRONT_X = 326;
+      var BLOCK_GAP = 62;
+      var OUTPUT_TAIL_X = 974;
+
+      var sim = {
+        phase: "idle",             // "idle" | "feeding" | "processing" | "exiting"
+        paused: false,
+        singleStepOnly: false,
+        activeId: null,
+        phaseT: 0,
+        evaluated: false,
+        beltOffset: 0,
+        rollerAngle: 0,
+        gearAngle: 0,
+        fanAngle: 0,
+        trapdoorOpen: 0,           // 0..1 pneumatic diverter chute angle
+        scanPulse: 0,              // 0..1 laser / weld flash
+        beacon: "idle",            // "idle" | "processing" | "accept" | "reject" | "merge"
+        verdictText: "",
+        nextBlockId: 1,
+        blocks: [],
+        accBlock: null,            // Single glowing accumulator block in reduce mode
+        rejectQueueCount: 0,
+        rafId: null,
+        lastTs: 0
+      };
+
+      function rebuildQueueState() {
+        var data = getCurrentInput().data;
+        sim.blocks = data.map(function (val, idx) {
+          return {
+            id: sim.nextBlockId++,
+            value: val,
+            origValue: val,
+            x: INPUT_FRONT_X - idx * BLOCK_GAP,
+            y: BELT_Y,
+            targetX: INPUT_FRONT_X - idx * BLOCK_GAP,
+            status: "queued",      // "queued" | "feeding" | "processing" | "exiting" | "output" | "chuting" | "rejected"
+            kind: "input",
+            sourceLabel: "Step " + (idx + 1),
+            isPresetItem: true,
+            scale: 1,
+            alpha: 1,
+            slotIndex: 0
+          };
+        });
+        sim.accBlock = null;
+        sim.rejectQueueCount = 0;
       }
 
-      function escapeHtml(str) {
-        return String(str)
-          .replace(/&/g, "&amp;")
-          .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;");
-      }
-
-      // ------------------------------------------------------------------------
-      // 6. Core Simulation Step Logic
-      // ------------------------------------------------------------------------
       function stopPlayback() {
-        if (state.timerId !== null) {
-          clearTimeout(state.timerId);
-          state.timerId = null;
-        }
         state.isPlaying = false;
       }
 
       function resetSimulation() {
         stopPlayback();
+        sim.phase = "idle";
+        sim.paused = false;
+        sim.singleStepOnly = false;
+        sim.activeId = null;
+        sim.phaseT = 0;
+        sim.evaluated = false;
+        sim.trapdoorOpen = 0;
+        sim.scanPulse = 0;
+        sim.beacon = "idle";
+        sim.verdictText = "";
         state.stepIndex = 0;
         state.outputItems = [];
         state.rejectedItems = [];
         state.accumulator = null;
         state.currentStepDetail = null;
         state.traceLogs = [];
+        rebuildQueueState();
         renderAll();
       }
 
-      function advanceOneStep() {
-        var inputObj = getCurrentInput();
-        var data = inputObj.data;
+      function applyJsFunctionalOperation(block) {
         var preset = getCurrentLambdaPreset();
-
-        if (state.stepIndex >= data.length) {
-          stopPlayback();
-          renderAll();
-          return false;
-        }
-
-        var item = data[state.stepIndex];
+        var item = block.origValue;
+        var sourceLabel = block.sourceLabel;
 
         if (state.mode === "map") {
-          var transformed = preset.fn(item);
+          // Execute real JavaScript Array.prototype.map()
+          var transformed = [item].map(preset.fn)[0];
+          block.value = transformed;
+          block.kind = "transformed";
           state.outputItems.push(transformed);
           state.currentStepDetail = {
             kind: "map",
@@ -1974,90 +2484,997 @@
             evalText: preset.describeStep(item, transformed),
             verdict: "TRANSFORMED"
           };
-          state.traceLogs.push("Step " + (state.stepIndex + 1) + ": x=" + item + " -> " + transformed);
+          state.traceLogs.push(sourceLabel + ": x=" + item + " -> " + transformed);
+          sim.beacon = "processing";
+          sim.verdictText = item + " -> " + transformed;
         } else if (state.mode === "filter") {
-          var passed = preset.fn(item);
+          // Execute real JavaScript Array.prototype.filter()
+          var passed = [item].filter(preset.fn).length > 0;
+          block.kind = passed ? "accepted" : "rejected";
           if (passed) {
             state.outputItems.push(item);
+            sim.beacon = "accept";
+            sim.verdictText = "ACCEPT";
           } else {
             state.rejectedItems.push(item);
+            sim.beacon = "reject";
+            sim.verdictText = "REJECT";
           }
           state.currentStepDetail = {
             kind: "filter",
             input: item,
             passed: passed,
             evalText: preset.describeStep(item, passed),
-            verdict: passed ? "KEPT" : "REJECTED"
+            verdict: passed ? "ACCEPT" : "REJECT"
           };
-          state.traceLogs.push("Step " + (state.stepIndex + 1) + ": x=" + item + " -> " + (passed ? "Kept" : "Rejected"));
+          state.traceLogs.push(sourceLabel + ": x=" + item + " -> " + (passed ? "Accept" : "Reject"));
         } else if (state.mode === "reduce") {
-          if (state.stepIndex === 0) {
-            // Initialize accumulator with the first element (standard Python reduce behavior)
-            state.accumulator = item;
+          // Execute real JavaScript Array.prototype.reduce()
+          if (state.accumulator === null) {
+            var seeded = [item].reduce(preset.fn);
+            state.accumulator = seeded;
+            sim.accBlock = {
+              value: seeded,
+              x: MACHINE_CX,
+              y: BELT_Y,
+              pulse: 1
+            };
             state.currentStepDetail = {
               kind: "reduce-init",
               input: item,
               prevAcc: null,
-              nextAcc: item,
-              evalText: "Initialize accumulator: acc = " + item,
+              nextAcc: seeded,
+              evalText: "Initialize accumulator: acc = " + seeded,
               verdict: "SEEDED ACC"
             };
-            state.traceLogs.push("Step 1: Initialize acc = " + item);
+            state.traceLogs.push(sourceLabel + ": Initialize acc = " + seeded);
+            sim.beacon = "merge";
+            sim.verdictText = "acc = " + seeded;
           } else {
             var prevAcc = state.accumulator;
-            var nextAcc = preset.fn(prevAcc, item);
+            var nextAcc = [prevAcc, item].reduce(preset.fn);
             state.accumulator = nextAcc;
+            if (sim.accBlock) {
+              sim.accBlock.value = nextAcc;
+              sim.accBlock.pulse = 1;
+            }
             state.currentStepDetail = {
               kind: "reduce",
               input: item,
               prevAcc: prevAcc,
               nextAcc: nextAcc,
               evalText: preset.describeStep(prevAcc, item, nextAcc),
-              verdict: "ACCUMULATED"
+              verdict: "MERGED"
             };
-            state.traceLogs.push("Step " + (state.stepIndex + 1) + ": acc=" + prevAcc + ", x=" + item + " -> acc=" + nextAcc);
+            state.traceLogs.push(sourceLabel + ": acc=" + prevAcc + ", x=" + item + " -> acc=" + nextAcc);
+            sim.beacon = "merge";
+            sim.verdictText = prevAcc + " -> " + nextAcc;
           }
         }
 
-        state.stepIndex += 1;
-
-        if (state.stepIndex >= data.length) {
-          stopPlayback();
+        if (block.isPresetItem) {
+          state.stepIndex += 1;
         }
-
         renderAll();
-        return state.stepIndex < data.length;
       }
 
-      function scheduleNextTick() {
-        if (!state.isPlaying) return;
-        state.timerId = setTimeout(function () {
-          var hasMore = advanceOneStep();
-          if (hasMore && state.isPlaying) {
-            scheduleNextTick();
+      function findActiveBlock() {
+        for (var i = 0; i < sim.blocks.length; i++) {
+          if (sim.blocks[i].id === sim.activeId) return sim.blocks[i];
+        }
+        return null;
+      }
+
+      function startNextBlockCycle() {
+        var nextBlock = null;
+        for (var i = 0; i < sim.blocks.length; i++) {
+          if (sim.blocks[i].status === "queued") {
+            nextBlock = sim.blocks[i];
+            break;
           }
-        }, getStepDelayMs());
+        }
+        if (!nextBlock) {
+          sim.phase = "idle";
+          sim.activeId = null;
+          state.isPlaying = false;
+          renderAll();
+          return false;
+        }
+        nextBlock.status = "feeding";
+        sim.activeId = nextBlock.id;
+        sim.phase = "feeding";
+        sim.phaseT = 0;
+        sim.evaluated = false;
+        sim.beacon = "idle";
+        sim.verdictText = "";
+        renderAll();
+        return true;
+      }
+
+      function advanceOneStep() {
+        if (sim.phase !== "idle") {
+          sim.paused = false;
+          sim.singleStepOnly = true;
+          renderAll();
+          return true;
+        }
+        sim.paused = false;
+        sim.singleStepOnly = true;
+        return startNextBlockCycle();
       }
 
       function startPlayback() {
         var data = getCurrentInput().data;
-        if (state.stepIndex >= data.length) {
+        if (state.stepIndex >= data.length && sim.phase === "idle") {
           resetSimulation();
         }
         state.isPlaying = true;
-        renderAll();
-        // Run first step briskly, then continue at configured speed
-        state.timerId = setTimeout(function () {
-          var hasMore = advanceOneStep();
-          if (hasMore && state.isPlaying) {
-            scheduleNextTick();
-          }
-        }, Math.min(350, getStepDelayMs()));
+        sim.paused = false;
+        sim.singleStepOnly = false;
+        if (sim.phase === "idle") {
+          startNextBlockCycle();
+        } else {
+          renderAll();
+        }
       }
 
       function processAllImmediately() {
         resetSimulation();
         startPlayback();
+      }
+
+      function pauseSimulation() {
+        stopPlayback();
+        if (sim.phase !== "idle") {
+          sim.paused = true;
+        }
+        renderAll();
+      }
+
+      function stepPhysics(dt) {
+        var speed = state.speedMultiplier;
+        var beltSpeedPx = 185 * speed;
+
+        // Decay visual pulses
+        sim.scanPulse = Math.max(0, sim.scanPulse - dt * 2.4);
+        if (sim.accBlock && sim.accBlock.pulse > 0) {
+          sim.accBlock.pulse = Math.max(0, sim.accBlock.pulse - dt * 2.2);
+        }
+
+        // Smooth trapdoor animation
+        var wantTrapdoor = (sim.phase === "exiting" && findActiveBlock() && findActiveBlock().status === "chuting") ? 1 : 0;
+        sim.trapdoorOpen += (wantTrapdoor - sim.trapdoorOpen) * Math.min(1, dt * 10);
+
+        // Smoothly glide settled output blocks to their target slot positions
+        for (var k = 0; k < sim.blocks.length; k++) {
+          var ob = sim.blocks[k];
+          if (ob.status === "output") {
+            ob.x += (ob.targetX - ob.x) * Math.min(1, dt * 6.5);
+            if (ob.x > SCENE_W + 40) {
+              ob.alpha = Math.max(0, ob.alpha - dt * 3);
+            }
+          }
+        }
+
+        if (sim.phase === "idle" || sim.paused) {
+          return;
+        }
+
+        var active = findActiveBlock();
+        if (!active) {
+          sim.phase = "idle";
+          return;
+        }
+
+        if (sim.phase === "feeding") {
+          // Move belt & rollers while feeding block into the machine
+          var movePx = beltSpeedPx * dt;
+          sim.beltOffset = (sim.beltOffset + movePx) % 24;
+          sim.rollerAngle += movePx / ROLLER_R;
+
+          active.x += movePx;
+
+          // Advance waiting queued blocks cleanly behind active block
+          var queueIdx = 0;
+          for (var q = 0; q < sim.blocks.length; q++) {
+            var qb = sim.blocks[q];
+            if (qb.status === "queued") {
+              var desiredX = INPUT_FRONT_X - queueIdx * BLOCK_GAP;
+              if (qb.x < desiredX) {
+                qb.x = Math.min(desiredX, qb.x + movePx);
+              }
+              queueIdx++;
+            }
+          }
+
+          if (active.x >= MACHINE_CX) {
+            active.x = MACHINE_CX;
+            active.status = "processing";
+            sim.phase = "processing";
+            sim.phaseT = 0;
+            sim.evaluated = false;
+            sim.beacon = "processing";
+            renderAll();
+          }
+        } else if (sim.phase === "processing") {
+          // Machine animates ONLY during processing! Gears & motor spin here
+          var procDuration = Math.max(0.36, 0.72 / speed);
+          sim.phaseT += dt / procDuration;
+          sim.gearAngle += dt * 3.8 * speed;
+          sim.fanAngle += dt * 11.0 * speed;
+
+          // In reduce mode with existing accumulator, physically slide incoming block into accBlock
+          if (state.mode === "reduce" && state.accumulator !== null) {
+            active.scale = Math.max(0.25, 1 - Math.max(0, sim.phaseT - 0.15) * 1.4);
+            active.alpha = Math.max(0, 1 - Math.max(0, sim.phaseT - 0.3) * 2.2);
+          }
+
+          if (!sim.evaluated && sim.phaseT >= 0.52) {
+            sim.evaluated = true;
+            sim.scanPulse = 1;
+            applyJsFunctionalOperation(active);
+          }
+
+          if (sim.phaseT >= 1) {
+            sim.phaseT = 0;
+            // Transition to exiting phase
+            if (state.mode === "filter" && active.kind === "rejected") {
+              active.status = "chuting";
+              active.slotIndex = sim.rejectQueueCount++;
+              sim.phase = "exiting";
+            } else if (state.mode === "reduce") {
+              // Remove consumed incoming block
+              sim.blocks = sim.blocks.filter(function (b) { return b.id !== active.id; });
+              var anyMoreQueued = sim.blocks.some(function (b) { return b.status === "queued"; });
+              if (!anyMoreQueued && state.stepIndex >= getCurrentInput().data.length && sim.accBlock) {
+                // Final reduce result block exits onto the right output belt!
+                var finalOut = {
+                  id: sim.nextBlockId++,
+                  value: sim.accBlock.value,
+                  origValue: sim.accBlock.value,
+                  x: MACHINE_CX,
+                  y: BELT_Y,
+                  targetX: OUTPUT_TAIL_X,
+                  status: "exiting",
+                  kind: "acc",
+                  sourceLabel: "Final",
+                  isPresetItem: false,
+                  scale: 1.08,
+                  alpha: 1,
+                  slotIndex: 0
+                };
+                sim.blocks.push(finalOut);
+                sim.activeId = finalOut.id;
+                sim.accBlock = null;
+                sim.phase = "exiting";
+              } else {
+                // Ready for next input block to merge into accBlock
+                sim.activeId = null;
+                sim.phase = "idle";
+                if (state.isPlaying && anyMoreQueued) {
+                  startNextBlockCycle();
+                } else {
+                  state.isPlaying = false;
+                  renderAll();
+                }
+                return;
+              }
+            } else {
+              // Map or Filter-Accept: FIFO slot assignment along output conveyor without overlap
+              var existingOut = sim.blocks.filter(function (b) { return b.status === "output"; }).length;
+              active.status = "exiting";
+              if (existingOut < 5) {
+                active.targetX = OUTPUT_TAIL_X - existingOut * 58;
+              } else {
+                active.targetX = OUTPUT_TAIL_X - 4 * 58;
+                sim.blocks.forEach(function (b) {
+                  if (b.status === "output") {
+                    b.targetX += 58;
+                  }
+                });
+              }
+              sim.phase = "exiting";
+            }
+            renderAll();
+          }
+        } else if (sim.phase === "exiting") {
+          if (active.status === "chuting") {
+            // Slide down angled rejection chute into lower reject bin (belt stationary or slow)
+            sim.phaseT += dt * 1.9 * speed;
+            var t = Math.min(1, sim.phaseT);
+            var startX = MACHINE_CX;
+            var startY = BELT_Y;
+            var binX = 590 + (active.slotIndex % 3) * 34;
+            var binY = 330;
+            // Smooth parabolic chute trajectory
+            active.x = startX + (binX - startX) * t;
+            active.y = startY + (binY - startY) * (t * t * 0.4 + t * 0.6);
+            active.scale = 1 - 0.18 * t;
+
+            if (t >= 1) {
+              active.status = "rejected";
+              sim.activeId = null;
+              sim.phase = "idle";
+              if (state.isPlaying && !sim.singleStepOnly) {
+                startNextBlockCycle();
+              } else {
+                state.isPlaying = false;
+                renderAll();
+              }
+            }
+          } else {
+            // Move belt & rollers while exiting object rides to right output zone
+            var exitMovePx = beltSpeedPx * 1.15 * dt;
+            sim.beltOffset = (sim.beltOffset + exitMovePx) % 24;
+            sim.rollerAngle += exitMovePx / ROLLER_R;
+            active.x += exitMovePx;
+
+            if (active.x >= active.targetX) {
+              active.x = active.targetX;
+              active.status = "output";
+              sim.activeId = null;
+              sim.phase = "idle";
+              if (state.isPlaying && !sim.singleStepOnly) {
+                startNextBlockCycle();
+              } else {
+                state.isPlaying = false;
+                renderAll();
+              }
+            }
+          }
+        }
+      }
+
+      // ------------------------------------------------------------------------
+      // 6B. High-DPI Canvas Industrial Renderer
+      // ------------------------------------------------------------------------
+      function drawRoundedRect(ctx, x, y, w, h, r) {
+        var radius = Math.min(r, w / 2, h / 2);
+        ctx.beginPath();
+        ctx.moveTo(x + radius, y);
+        ctx.arcTo(x + w, y, x + w, y + h, radius);
+        ctx.arcTo(x + w, y + h, x, y + h, radius);
+        ctx.arcTo(x, y + h, x, y, radius);
+        ctx.arcTo(x, y, x + w, y, radius);
+        ctx.closePath();
+      }
+
+      function drawGear(ctx, cx, cy, outerR, innerR, teeth, angle, fillGrad, strokeCol) {
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(angle);
+        ctx.beginPath();
+        var step = (Math.PI * 2) / teeth;
+        for (var i = 0; i < teeth; i++) {
+          var a0 = i * step;
+          var a1 = a0 + step * 0.22;
+          var a2 = a0 + step * 0.36;
+          var a3 = a0 + step * 0.64;
+          var a4 = a0 + step * 0.78;
+          if (i === 0) ctx.moveTo(Math.cos(a0) * innerR, Math.sin(a0) * innerR);
+          else ctx.lineTo(Math.cos(a0) * innerR, Math.sin(a0) * innerR);
+          ctx.lineTo(Math.cos(a1) * innerR, Math.sin(a1) * innerR);
+          ctx.lineTo(Math.cos(a2) * outerR, Math.sin(a2) * outerR);
+          ctx.lineTo(Math.cos(a3) * outerR, Math.sin(a3) * outerR);
+          ctx.lineTo(Math.cos(a4) * innerR, Math.sin(a4) * innerR);
+        }
+        ctx.closePath();
+        ctx.fillStyle = fillGrad;
+        ctx.fill();
+        ctx.lineWidth = 1.2;
+        ctx.strokeStyle = strokeCol;
+        ctx.stroke();
+
+        // Inner hub & spokes
+        ctx.beginPath();
+        ctx.arc(0, 0, innerR * 0.62, 0, Math.PI * 2);
+        ctx.fillStyle = "#0b1326";
+        ctx.fill();
+        ctx.strokeStyle = "rgba(148, 163, 184, 0.45)";
+        ctx.stroke();
+
+        for (var s = 0; s < 4; s++) {
+          var sa = s * (Math.PI / 2);
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.lineTo(Math.cos(sa) * innerR * 0.6, Math.sin(sa) * innerR * 0.6);
+          ctx.lineWidth = 2.4;
+          ctx.strokeStyle = "#475569";
+          ctx.stroke();
+        }
+
+        ctx.beginPath();
+        ctx.arc(0, 0, innerR * 0.24, 0, Math.PI * 2);
+        ctx.fillStyle = "#94a3b8";
+        ctx.fill();
+        ctx.restore();
+      }
+
+      function drawPackageBlock(ctx, x, beltSurfaceY, label, kind, scale, alpha) {
+        if (alpha <= 0.01) return;
+        ctx.save();
+        ctx.globalAlpha = alpha;
+        var w = 44 * scale;
+        var h = 38 * scale;
+        var bx = x - w / 2;
+        var by = beltSurfaceY - h - 2;
+
+        // Cast shadow onto dark rubber belt
+        ctx.fillStyle = "rgba(2, 6, 23, 0.65)";
+        ctx.beginPath();
+        ctx.ellipse(x, beltSurfaceY + 1, w * 0.56, 4.5 * scale, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Palette per logical state
+        var topCol = "#3b82f6";
+        var faceTop = "#1e3a8a";
+        var faceBot = "#0f1e47";
+        var borderCol = "#60a5fa";
+        var textCol = "#eff6ff";
+
+        if (kind === "transformed") {
+          topCol = "#22d3ee";
+          faceTop = "#0e7490";
+          faceBot = "#083344";
+          borderCol = "#67e8f9";
+          textCol = "#ecfeff";
+        } else if (kind === "accepted") {
+          topCol = "#34d399";
+          faceTop = "#065f46";
+          faceBot = "#022c22";
+          borderCol = "#6ee7b7";
+          textCol = "#ecfdf5";
+        } else if (kind === "rejected") {
+          topCol = "#fb7185";
+          faceTop = "#881337";
+          faceBot = "#4c0519";
+          borderCol = "#fda4af";
+          textCol = "#fff1f2";
+        } else if (kind === "acc") {
+          topCol = "#a78bfa";
+          faceTop = "#4c1d95";
+          faceBot = "#2e1065";
+          borderCol = "#c4b5fd";
+          textCol = "#f5f3ff";
+        }
+
+        // 3D top bevel lip
+        ctx.beginPath();
+        ctx.moveTo(bx + 4, by - 5);
+        ctx.lineTo(bx + w + 4, by - 5);
+        ctx.lineTo(bx + w, by);
+        ctx.lineTo(bx, by);
+        ctx.closePath();
+        ctx.fillStyle = topCol;
+        ctx.fill();
+
+        // 3D right bevel side
+        ctx.beginPath();
+        ctx.moveTo(bx + w, by);
+        ctx.lineTo(bx + w + 4, by - 5);
+        ctx.lineTo(bx + w + 4, by + h - 5);
+        ctx.lineTo(bx + w, by + h);
+        ctx.closePath();
+        ctx.fillStyle = faceBot;
+        ctx.fill();
+
+        // Main front machined block face
+        var grad = ctx.createLinearGradient(bx, by, bx, by + h);
+        grad.addColorStop(0, faceTop);
+        grad.addColorStop(1, faceBot);
+        drawRoundedRect(ctx, bx, by, w, h, 4);
+        ctx.fillStyle = grad;
+        ctx.fill();
+        ctx.lineWidth = 1.4;
+        ctx.strokeStyle = borderCol;
+        ctx.stroke();
+
+        // Corner rivets / industrial band
+        ctx.fillStyle = "rgba(255, 255, 255, 0.22)";
+        ctx.fillRect(bx + 4, by + 4, 3, 3);
+        ctx.fillRect(bx + w - 7, by + 4, 3, 3);
+
+        // Stamped number
+        var labelStr = String(label);
+        var baseFontSize = labelStr.length >= 5 ? 10 : labelStr.length === 4 ? 12 : labelStr.length === 3 ? 13.5 : 15;
+        ctx.fillStyle = textCol;
+        ctx.font = "700 " + Math.round(baseFontSize * scale) + "px 'JetBrains Mono', monospace";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(labelStr, x, by + h / 2 + 2);
+        ctx.restore();
+      }
+
+      function renderCanvasFrame() {
+        var canvas = els.canvas;
+        if (!canvas) return;
+        var ctx = canvas.getContext("2d");
+        if (!ctx) return;
+
+        var dpr = Math.min(window.devicePixelRatio || 1, 2);
+        var rect = canvas.getBoundingClientRect();
+        if (rect.width === 0) return;
+        var targetW = Math.round(rect.width * dpr);
+        var targetH = Math.round((rect.width * (SCENE_H / SCENE_W)) * dpr);
+        if (canvas.width !== targetW || canvas.height !== targetH) {
+          canvas.width = targetW;
+          canvas.height = targetH;
+        }
+
+        ctx.save();
+        ctx.scale(targetW / SCENE_W, targetH / SCENE_H);
+
+        // 1. Dark Industrial Workshop Backdrop & Overhead Lighting Cone
+        var bgGrad = ctx.createLinearGradient(0, 0, 0, SCENE_H);
+        bgGrad.addColorStop(0, "#050a18");
+        bgGrad.addColorStop(0.76, "#0b1328");
+        bgGrad.addColorStop(1, "#070c1b");
+        ctx.fillStyle = bgGrad;
+        ctx.fillRect(0, 0, SCENE_W, SCENE_H);
+
+        // Overhead factory light beam onto processing machine
+        var lightCone = ctx.createRadialGradient(MACHINE_CX, 28, 12, MACHINE_CX, 210, 320);
+        lightCone.addColorStop(0, "rgba(147, 197, 253, 0.14)");
+        lightCone.addColorStop(0.55, "rgba(59, 130, 246, 0.05)");
+        lightCone.addColorStop(1, "rgba(0, 0, 0, 0)");
+        ctx.fillStyle = lightCone;
+        ctx.fillRect(0, 0, SCENE_W, SCENE_H);
+
+        // Subtle factory structural columns
+        ctx.fillStyle = "rgba(30, 41, 59, 0.24)";
+        [140, 340, 740, 940].forEach(function (colX) {
+          ctx.fillRect(colX - 8, 0, 16, FLOOR_Y);
+        });
+
+        // Concrete shop floor
+        var floorGrad = ctx.createLinearGradient(0, FLOOR_Y, 0, SCENE_H);
+        floorGrad.addColorStop(0, "#10182b");
+        floorGrad.addColorStop(1, "#060b16");
+        ctx.fillStyle = floorGrad;
+        ctx.fillRect(0, FLOOR_Y, SCENE_W, SCENE_H - FLOOR_Y);
+        ctx.strokeStyle = "rgba(148, 163, 184, 0.22)";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(0, FLOOR_Y);
+        ctx.lineTo(SCENE_W, FLOOR_Y);
+        ctx.stroke();
+
+        // Section zone titles (INPUT / PROCESSING MACHINE / OUTPUT)
+        ctx.font = "600 11px 'Plus Jakarta Sans', sans-serif";
+        ctx.fillStyle = "rgba(148, 163, 184, 0.8)";
+        ctx.textAlign = "left";
+        ctx.fillText("INPUT CONVEYOR", 56, 30);
+        ctx.textAlign = "right";
+        ctx.fillText("OUTPUT CONVEYOR", SCENE_W - 56, 30);
+
+        // 2. Metal Support Legs & Floor Stanchions
+        var legXs = [92, 294, 786, 988];
+        legXs.forEach(function (lx) {
+          // Floor shadow
+          ctx.fillStyle = "rgba(2, 6, 23, 0.65)";
+          ctx.beginPath();
+          ctx.ellipse(lx, FLOOR_Y + 4, 24, 5, 0, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Steel H-beam leg
+          var legGrad = ctx.createLinearGradient(lx - 8, 0, lx + 8, 0);
+          legGrad.addColorStop(0, "#1e293b");
+          legGrad.addColorStop(0.35, "#475569");
+          legGrad.addColorStop(0.7, "#334155");
+          legGrad.addColorStop(1, "#0f172a");
+          ctx.fillStyle = legGrad;
+          ctx.fillRect(lx - 8, BELT_Y + 24, 16, FLOOR_Y - (BELT_Y + 24));
+
+          // Anchor baseplate & bolts
+          ctx.fillStyle = "#334155";
+          ctx.fillRect(lx - 18, FLOOR_Y - 6, 36, 6);
+          ctx.fillStyle = "#94a3b8";
+          ctx.fillRect(lx - 14, FLOOR_Y - 9, 4, 3);
+          ctx.fillRect(lx + 10, FLOOR_Y - 9, 4, 3);
+        });
+
+        // Cross-bracing struts
+        ctx.strokeStyle = "#293548";
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.moveTo(96, BELT_Y + 42);
+        ctx.lineTo(290, FLOOR_Y - 12);
+        ctx.moveTo(290, BELT_Y + 42);
+        ctx.lineTo(96, FLOOR_Y - 12);
+        ctx.moveTo(790, BELT_Y + 42);
+        ctx.lineTo(984, FLOOR_Y - 12);
+        ctx.moveTo(984, BELT_Y + 42);
+        ctx.lineTo(790, FLOOR_Y - 12);
+        ctx.stroke();
+
+        // 3. Lower Rejection Bin & Pneumatic Chute (visible in filter mode)
+        if (state.mode === "filter") {
+          var chuteGrad = ctx.createLinearGradient(MACHINE_CX - 10, BELT_Y + 24, 650, FLOOR_Y);
+          chuteGrad.addColorStop(0, "#1e293b");
+          chuteGrad.addColorStop(1, "#0f172a");
+          ctx.beginPath();
+          ctx.moveTo(MACHINE_CX - 34, BELT_Y + 26);
+          ctx.lineTo(MACHINE_CX + 26, BELT_Y + 26);
+          ctx.lineTo(664, FLOOR_Y - 22);
+          ctx.lineTo(570, FLOOR_Y - 22);
+          ctx.closePath();
+          ctx.fillStyle = chuteGrad;
+          ctx.fill();
+          ctx.strokeStyle = "rgba(251, 113, 133, 0.36)";
+          ctx.lineWidth = 1.4;
+          ctx.stroke();
+
+          // Swinging pneumatic diverter trapdoor plate
+          ctx.save();
+          ctx.translate(MACHINE_CX - 28, BELT_Y + 26);
+          ctx.rotate(sim.trapdoorOpen * 0.72);
+          ctx.fillStyle = sim.trapdoorOpen > 0.1 ? "#fb7185" : "#475569";
+          ctx.fillRect(0, -3, 52, 6);
+          ctx.restore();
+
+          // Reject collection tray on floor
+          drawRoundedRect(ctx, 560, FLOOR_Y - 34, 132, 34, 4);
+          ctx.fillStyle = "#1a1120";
+          ctx.fill();
+          ctx.strokeStyle = "rgba(251, 113, 133, 0.52)";
+          ctx.stroke();
+          ctx.font = "600 10px 'JetBrains Mono', monospace";
+          ctx.fillStyle = "#fda4af";
+          ctx.textAlign = "center";
+          ctx.fillText("REJECT BIN (" + state.rejectedItems.length + ")", 626, FLOOR_Y - 10);
+        }
+
+        // 4. Industrial Drive Motor & Meshing Gears (mounted under left-center chassis)
+        var motorX = 408;
+        var motorY = 294;
+        // Motor mount bracket
+        ctx.fillStyle = "#1e293b";
+        ctx.fillRect(motorX - 4, BELT_Y + 24, 82, 46);
+        // Finned AC motor body
+        var motorGrad = ctx.createLinearGradient(0, motorY - 18, 0, motorY + 22);
+        motorGrad.addColorStop(0, "#475569");
+        motorGrad.addColorStop(0.35, "#64748b");
+        motorGrad.addColorStop(0.75, "#334155");
+        motorGrad.addColorStop(1, "#1e293b");
+        drawRoundedRect(ctx, motorX, motorY - 16, 68, 36, 6);
+        ctx.fillStyle = motorGrad;
+        ctx.fill();
+        ctx.strokeStyle = "rgba(148, 163, 184, 0.35)";
+        ctx.stroke();
+        // Cooling fins
+        ctx.strokeStyle = "rgba(15, 23, 42, 0.7)";
+        ctx.lineWidth = 1.5;
+        for (var fin = 0; fin < 5; fin++) {
+          ctx.beginPath();
+          ctx.moveTo(motorX + 18, motorY - 12 + fin * 7);
+          ctx.lineTo(motorX + 62, motorY - 12 + fin * 7);
+          ctx.stroke();
+        }
+        // Spinning motor fan grille on left end
+        ctx.save();
+        ctx.translate(motorX + 10, motorY + 2);
+        ctx.beginPath();
+        ctx.arc(0, 0, 10, 0, Math.PI * 2);
+        ctx.fillStyle = "#090f1e";
+        ctx.fill();
+        ctx.rotate(sim.fanAngle);
+        ctx.strokeStyle = sim.phase === "processing" ? "#60a5fa" : "#64748b";
+        ctx.lineWidth = 2;
+        for (var fb = 0; fb < 3; fb++) {
+          var fa = fb * ((Math.PI * 2) / 3);
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.lineTo(Math.cos(fa) * 8, Math.sin(fa) * 8);
+          ctx.stroke();
+        }
+        ctx.restore();
+
+        // Meshing Steel Gears (Gear A & Gear B connected to motor shaft)
+        var gearGrad = ctx.createRadialGradient(498, 294, 4, 498, 294, 24);
+        gearGrad.addColorStop(0, "#94a3b8");
+        gearGrad.addColorStop(0.6, "#64748b");
+        gearGrad.addColorStop(1, "#334155");
+        drawGear(ctx, 496, 296, 22, 17, 14, sim.gearAngle, gearGrad, "rgba(226, 232, 240, 0.45)");
+        drawGear(ctx, 530, 286, 16, 12, 10, -sim.gearAngle * 1.4 + 0.16, gearGrad, "rgba(167, 139, 250, 0.5)");
+
+        // Drive belt linking Motor Shaft -> Gear A
+        ctx.strokeStyle = "#0f172a";
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.moveTo(motorX + 66, motorY - 5);
+        ctx.lineTo(496, 279);
+        ctx.moveTo(motorX + 66, motorY + 9);
+        ctx.lineTo(496, 313);
+        ctx.stroke();
+
+        // 5. Rear Stainless Guide Rail
+        var railGrad = ctx.createLinearGradient(0, BELT_Y - 16, 0, BELT_Y - 8);
+        railGrad.addColorStop(0, "#94a3b8");
+        railGrad.addColorStop(0.5, "#cbd5e1");
+        railGrad.addColorStop(1, "#475569");
+        ctx.fillStyle = railGrad;
+        ctx.fillRect(BELT_LEFT + 10, BELT_Y - 14, BELT_RIGHT - BELT_LEFT - 20, 6);
+
+        // 6. Dark Rubber Conveyor Belt Loop & Moving Texture
+        // Outer loop rubber body
+        drawRoundedRect(ctx, BELT_LEFT, BELT_Y - 2, BELT_RIGHT - BELT_LEFT, 30, 15);
+        var beltGrad = ctx.createLinearGradient(0, BELT_Y - 2, 0, BELT_Y + 28);
+        beltGrad.addColorStop(0, "#1e293b");
+        beltGrad.addColorStop(0.25, "#0f172a");
+        beltGrad.addColorStop(0.85, "#090f1d");
+        beltGrad.addColorStop(1, "#1e293b");
+        ctx.fillStyle = beltGrad;
+        ctx.fill();
+        ctx.strokeStyle = "rgba(148, 163, 184, 0.35)";
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
+
+        // Moving rubber ribbed cleats along top belt surface
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(BELT_LEFT + 14, BELT_Y - 2, BELT_RIGHT - BELT_LEFT - 28, 10);
+        ctx.clip();
+        for (var cx = BELT_LEFT + (sim.beltOffset % 24) - 24; cx < BELT_RIGHT; cx += 24) {
+          ctx.fillStyle = "rgba(96, 165, 250, 0.28)";
+          ctx.beginPath();
+          ctx.moveTo(cx, BELT_Y - 1);
+          ctx.lineTo(cx + 8, BELT_Y - 1);
+          ctx.lineTo(cx + 4, BELT_Y + 6);
+          ctx.lineTo(cx - 4, BELT_Y + 6);
+          ctx.closePath();
+          ctx.fill();
+        }
+        ctx.restore();
+
+        // 7. Metallic Conveyor Rollers (15 precision rollers rotating proportionally to belt speed)
+        var rollerStart = BELT_LEFT + 16;
+        var rollerEnd = BELT_RIGHT - 16;
+        var rollerCount = 15;
+        var rollerStep = (rollerEnd - rollerStart) / (rollerCount - 1);
+        for (var r = 0; r < rollerCount; r++) {
+          var rx = rollerStart + r * rollerStep;
+          var ry = BELT_Y + 13;
+          var rr = (r === 0 || r === rollerCount - 1) ? 14 : ROLLER_R;
+
+          var rGrad = ctx.createRadialGradient(rx - 3, ry - 3, 2, rx, ry, rr);
+          rGrad.addColorStop(0, "#e2e8f0");
+          rGrad.addColorStop(0.45, "#64748b");
+          rGrad.addColorStop(1, "#1e293b");
+
+          ctx.beginPath();
+          ctx.arc(rx, ry, rr, 0, Math.PI * 2);
+          ctx.fillStyle = rGrad;
+          ctx.fill();
+          ctx.strokeStyle = "#0f172a";
+          ctx.lineWidth = 1.2;
+          ctx.stroke();
+
+          // Rotating hub spokes
+          ctx.save();
+          ctx.translate(rx, ry);
+          ctx.rotate(sim.rollerAngle);
+          ctx.strokeStyle = "rgba(15, 23, 42, 0.72)";
+          ctx.lineWidth = 1.6;
+          for (var sp = 0; sp < 3; sp++) {
+            var sa2 = sp * ((Math.PI * 2) / 3);
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(Math.cos(sa2) * (rr - 3), Math.sin(sa2) * (rr - 3));
+            ctx.stroke();
+          }
+          ctx.beginPath();
+          ctx.arc(0, 0, 3, 0, Math.PI * 2);
+          ctx.fillStyle = "#cbd5e1";
+          ctx.fill();
+          ctx.restore();
+        }
+
+        // Front steel C-channel belt frame rail (over lower half of rollers)
+        var chGrad = ctx.createLinearGradient(0, BELT_Y + 14, 0, BELT_Y + 26);
+        chGrad.addColorStop(0, "#475569");
+        chGrad.addColorStop(0.4, "#334155");
+        chGrad.addColorStop(1, "#1e293b");
+        ctx.fillStyle = chGrad;
+        ctx.fillRect(BELT_LEFT + 22, BELT_Y + 15, BELT_RIGHT - BELT_LEFT - 44, 10);
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.14)";
+        ctx.beginPath();
+        ctx.moveTo(BELT_LEFT + 22, BELT_Y + 15);
+        ctx.lineTo(BELT_RIGHT - 22, BELT_Y + 15);
+        ctx.stroke();
+
+        // 8. Draw Blocks Outside Machine (queued input, output, chuting, rejected)
+        // Machine interior blocks are clipped & drawn inside the machine glass chamber!
+        for (var bIdx = 0; bIdx < sim.blocks.length; bIdx++) {
+          var blk = sim.blocks[bIdx];
+          if (blk.x < MACHINE_X1 + 8 || blk.x > MACHINE_X2 - 8 || blk.status === "chuting" || blk.status === "rejected") {
+            var edgeFade = (blk.status === "queued" && blk.x < BELT_LEFT + 12)
+              ? Math.max(0, (blk.x - (BELT_LEFT - 16)) / 28)
+              : 1;
+            drawPackageBlock(ctx, blk.x, blk.y, blk.value, blk.kind, blk.scale, blk.alpha * edgeFade);
+          }
+        }
+
+        // 9. Central Industrial Processing Machine Housing
+        var mGrad = ctx.createLinearGradient(MACHINE_X1, 46, MACHINE_X1, BELT_Y + 32);
+        mGrad.addColorStop(0, "#27344d");
+        mGrad.addColorStop(0.2, "#19253c");
+        mGrad.addColorStop(0.85, "#111b2e");
+        mGrad.addColorStop(1, "#0b1322");
+
+        drawRoundedRect(ctx, MACHINE_X1, 48, MACHINE_X2 - MACHINE_X1, BELT_Y - 18, 12);
+        ctx.fillStyle = mGrad;
+        ctx.fill();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = sim.phase === "processing" ? "rgba(147, 197, 253, 0.72)" : "rgba(148, 163, 184, 0.38)";
+        ctx.stroke();
+
+        // Machine Nameplate & Digital Telemetry Faceplate
+        drawRoundedRect(ctx, MACHINE_X1 + 18, 60, MACHINE_X2 - MACHINE_X1 - 36, 46, 7);
+        ctx.fillStyle = "#060b18";
+        ctx.fill();
+        ctx.strokeStyle = "rgba(96, 165, 250, 0.35)";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        var activePreset = getCurrentLambdaPreset();
+        ctx.textAlign = "left";
+        ctx.font = "700 11px 'Outfit', sans-serif";
+        ctx.fillStyle = "#94a3b8";
+        ctx.fillText("PROCESSING MACHINE · " + state.mode.toUpperCase(), MACHINE_X1 + 28, 76);
+
+        ctx.font = "600 13px 'JetBrains Mono', monospace";
+        ctx.fillStyle = "#93c5fd";
+        ctx.fillText(activePreset.lambdaText, MACHINE_X1 + 28, 95);
+
+        // Status Indicator Beacon Lamps on Machine Right Top (ACCEPT / REJECT / RUN)
+        var lampX = MACHINE_X2 - 86;
+        var lampY = 83;
+        if (state.mode === "filter") {
+          var isAcc = sim.beacon === "accept";
+          var isRej = sim.beacon === "reject";
+          // ACCEPT lamp
+          ctx.fillStyle = isAcc ? "#10b981" : "rgba(16, 185, 129, 0.18)";
+          drawRoundedRect(ctx, lampX - 38, lampY - 11, 52, 20, 4);
+          ctx.fill();
+          ctx.font = "700 10px 'JetBrains Mono', monospace";
+          ctx.textAlign = "center";
+          ctx.fillStyle = isAcc ? "#022c22" : "#6ee7b7";
+          ctx.fillText("ACCEPT", lampX - 12, lampY);
+
+          // REJECT lamp
+          ctx.fillStyle = isRej ? "#f43f5e" : "rgba(244, 63, 94, 0.18)";
+          drawRoundedRect(ctx, lampX + 18, lampY - 11, 52, 20, 4);
+          ctx.fill();
+          ctx.fillStyle = isRej ? "#4c0519" : "#fda4af";
+          ctx.fillText("REJECT", lampX + 44, lampY);
+        } else {
+          var runColor = sim.phase === "processing" ? "#8b5cf6" : (sim.phase !== "idle" ? "#3b82f6" : "#334155");
+          ctx.fillStyle = runColor;
+          drawRoundedRect(ctx, lampX - 6, lampY - 11, 76, 20, 4);
+          ctx.fill();
+          ctx.font = "700 10px 'JetBrains Mono', monospace";
+          ctx.textAlign = "center";
+          ctx.fillStyle = "#f8fafc";
+          ctx.fillText(sim.phase === "processing" ? "ACTIVE" : (sim.phase === "idle" ? "IDLE" : "CONVEYING"), lampX + 32, lampY);
+        }
+
+        // Armored Glass Inspection Chamber Window
+        var winX = MACHINE_X1 + 22;
+        var winY = 118;
+        var winW = MACHINE_X2 - MACHINE_X1 - 44;
+        var winH = BELT_Y - winY + 2;
+        drawRoundedRect(ctx, winX, winY, winW, winH, 8);
+        ctx.fillStyle = "#060d1e";
+        ctx.fill();
+        ctx.strokeStyle = "rgba(148, 163, 184, 0.3)";
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        // Chamber Interior (clipped so blocks inside machine render cleanly behind glass glare)
+        ctx.save();
+        drawRoundedRect(ctx, winX + 1, winY + 1, winW - 2, winH - 2, 7);
+        ctx.clip();
+
+        // Overhead processing servo head inside chamber
+        ctx.fillStyle = "#334155";
+        ctx.fillRect(MACHINE_CX - 28, winY, 56, 14);
+        ctx.fillStyle = sim.phase === "processing" ? "#60a5fa" : "#475569";
+        ctx.fillRect(MACHINE_CX - 12, winY + 14, 24, 6);
+
+        // Laser / optical scan beam when processing
+        if (sim.phase === "processing" || sim.scanPulse > 0.05) {
+          var beamAlpha = sim.phase === "processing" ? 0.28 : sim.scanPulse * 0.35;
+          var beamColor = sim.beacon === "reject"
+            ? "rgba(251, 113, 133, " + beamAlpha + ")"
+            : sim.beacon === "accept"
+              ? "rgba(52, 211, 153, " + beamAlpha + ")"
+              : sim.beacon === "merge"
+                ? "rgba(167, 139, 250, " + beamAlpha + ")"
+                : "rgba(96, 165, 250, " + beamAlpha + ")";
+          ctx.beginPath();
+          ctx.moveTo(MACHINE_CX - 10, winY + 20);
+          ctx.lineTo(MACHINE_CX + 10, winY + 20);
+          ctx.lineTo(MACHINE_CX + 48, BELT_Y);
+          ctx.lineTo(MACHINE_CX - 48, BELT_Y);
+          ctx.closePath();
+          ctx.fillStyle = beamColor;
+          ctx.fill();
+        }
+
+        // Accumulator Core Block inside chamber in REDUCE mode
+        if (state.mode === "reduce" && sim.accBlock) {
+          var accPulseScale = 1.12 + sim.accBlock.pulse * 0.14;
+          drawPackageBlock(ctx, sim.accBlock.x, sim.accBlock.y, "acc=" + sim.accBlock.value, "acc", accPulseScale, 1);
+          if (sim.accBlock.pulse > 0.05) {
+            ctx.beginPath();
+            ctx.arc(sim.accBlock.x, BELT_Y - 22, 34 + (1 - sim.accBlock.pulse) * 26, 0, Math.PI * 2);
+            ctx.strokeStyle = "rgba(196, 181, 253, " + sim.accBlock.pulse + ")";
+            ctx.lineWidth = 2.5;
+            ctx.stroke();
+          }
+        }
+
+        // Draw any block currently inside the machine chamber
+        for (var mb = 0; mb < sim.blocks.length; mb++) {
+          var mBlk = sim.blocks[mb];
+          if (mBlk.x >= MACHINE_X1 + 8 && mBlk.x <= MACHINE_X2 - 8 && mBlk.status !== "chuting" && mBlk.status !== "rejected") {
+            drawPackageBlock(ctx, mBlk.x, mBlk.y, mBlk.value, mBlk.kind, mBlk.scale, mBlk.alpha);
+          }
+        }
+
+        // Verdict / Operation text inside upper chamber
+        if (sim.verdictText) {
+          ctx.font = "700 12px 'JetBrains Mono', monospace";
+          ctx.textAlign = "center";
+          ctx.fillStyle = sim.beacon === "reject" ? "#fda4af" : sim.beacon === "accept" ? "#6ee7b7" : sim.beacon === "merge" ? "#ddd6fe" : "#93c5fd";
+          ctx.fillText(sim.verdictText, MACHINE_CX, winY + 34);
+        }
+
+        // Diagonal specular glass reflection
+        ctx.fillStyle = "rgba(255, 255, 255, 0.04)";
+        ctx.beginPath();
+        ctx.moveTo(winX + 18, winY);
+        ctx.lineTo(winX + 78, winY);
+        ctx.lineTo(winX + 24, winY + winH);
+        ctx.lineTo(winX - 20, winY + winH);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+
+        // Rubber intake & exit curtain shrouds
+        ctx.fillStyle = "#090e1c";
+        ctx.fillRect(MACHINE_X1 - 4, 170, 10, 62);
+        ctx.fillRect(MACHINE_X2 - 6, 170, 10, 62);
+        ctx.strokeStyle = "rgba(148, 163, 184, 0.3)";
+        ctx.lineWidth = 1;
+        ctx.strokeRect(MACHINE_X1 - 4, 170, 10, 62);
+        ctx.strokeRect(MACHINE_X2 - 6, 170, 10, 62);
+
+        // Corner bolts on machine chassis
+        [
+          [MACHINE_X1 + 10, 58], [MACHINE_X2 - 10, 58],
+          [MACHINE_X1 + 10, BELT_Y + 20], [MACHINE_X2 - 10, BELT_Y + 20]
+        ].forEach(function (pt) {
+          ctx.beginPath();
+          ctx.arc(pt[0], pt[1], 3, 0, Math.PI * 2);
+          ctx.fillStyle = "#64748b";
+          ctx.fill();
+        });
+
+        ctx.restore();
+      }
+
+      function startAnimationLoop() {
+        if (sim.rafId !== null) return;
+        sim.lastTs = performance.now();
+        function frame(now) {
+          var dt = Math.min((now - sim.lastTs) / 1000, 0.05);
+          sim.lastTs = now;
+          stepPhysics(dt);
+          renderCanvasFrame();
+          sim.rafId = requestAnimationFrame(frame);
+        }
+        sim.rafId = requestAnimationFrame(frame);
       }
 
       // ------------------------------------------------------------------------
@@ -2074,9 +3491,53 @@
           btn.addEventListener("click", function () {
             state.inputPresetId = preset.id;
             resetSimulation();
+            startPlayback();
           });
-          els.inputPresetsWrap.appendChild(btn);
+
+          if (preset.isCustom) {
+            var itemWrap = document.createElement("span");
+            itemWrap.className = "custom-preset-item";
+            var delBtn = document.createElement("button");
+            delBtn.type = "button";
+            delBtn.className = "custom-preset-del";
+            delBtn.title = "Remove custom preset";
+            delBtn.setAttribute("aria-label", "Remove custom preset " + preset.label);
+            delBtn.innerHTML = "&times;";
+            delBtn.addEventListener("click", function () {
+              var idx = INPUT_PRESETS.findIndex(function (p) { return p.id === preset.id; });
+              if (idx !== -1) {
+                INPUT_PRESETS.splice(idx, 1);
+                if (state.inputPresetId === preset.id) {
+                  state.inputPresetId = INPUT_PRESETS[0].id;
+                  resetSimulation();
+                } else {
+                  renderPresets();
+                }
+              }
+            });
+            itemWrap.appendChild(btn);
+            itemWrap.appendChild(delBtn);
+            els.inputPresetsWrap.appendChild(itemWrap);
+          } else {
+            els.inputPresetsWrap.appendChild(btn);
+          }
         });
+
+        // "+ Custom" button for creating a custom preset input list
+        var addCustomBtn = document.createElement("button");
+        addCustomBtn.type = "button";
+        addCustomBtn.className = "preset-btn custom-trigger" + (state.showCustomInputBuilder ? " active" : "");
+        addCustomBtn.textContent = "+ Custom";
+        addCustomBtn.addEventListener("click", function () {
+          state.showCustomInputBuilder = !state.showCustomInputBuilder;
+          els.customInputError.hidden = true;
+          renderPresets();
+          if (state.showCustomInputBuilder) {
+            els.customInputField.focus();
+          }
+        });
+        els.inputPresetsWrap.appendChild(addCustomBtn);
+        els.customInputBuilder.hidden = !state.showCustomInputBuilder;
 
         // Render lambda presets for active mode
         var op = getCurrentOperation();
@@ -2091,10 +3552,45 @@
           btn.textContent = preset.label;
           btn.addEventListener("click", function () {
             state.lambdaPresetId = preset.id;
+            state.showCustomLambdaBuilder = false;
             resetSimulation();
           });
           els.lambdaPresetsWrap.appendChild(btn);
         });
+
+        // Custom < / > comparison option in Lambda Operation Preset
+        var customFilterPreset = buildCustomFilterPreset();
+        var isCustomCmpActive = state.mode === "filter" && state.lambdaPresetId === "custom-cmp";
+        var customCmpBtn = document.createElement("button");
+        customCmpBtn.type = "button";
+        customCmpBtn.className = "preset-btn custom-trigger purple-trigger" + (isCustomCmpActive ? " active purple" : "");
+        customCmpBtn.textContent = isCustomCmpActive || state.mode === "filter"
+          ? "Custom: " + customFilterPreset.label
+          : "Custom < / > (filter)";
+        customCmpBtn.addEventListener("click", function () {
+          if (state.mode !== "filter") {
+            state.mode = "filter";
+            state.lambdaPresetId = "custom-cmp";
+            state.showCustomLambdaBuilder = true;
+            resetSimulation();
+          } else if (state.lambdaPresetId !== "custom-cmp") {
+            state.lambdaPresetId = "custom-cmp";
+            state.showCustomLambdaBuilder = true;
+            resetSimulation();
+          } else {
+            state.showCustomLambdaBuilder = !state.showCustomLambdaBuilder;
+            renderPresets();
+          }
+        });
+        els.lambdaPresetsWrap.appendChild(customCmpBtn);
+
+        els.customLambdaBuilder.hidden = !(state.mode === "filter" && (state.showCustomLambdaBuilder || isCustomCmpActive));
+        els.cmpOpButtons.forEach(function (opBtn) {
+          opBtn.classList.toggle("active", opBtn.dataset.cmpOp === state.customFilterOp);
+        });
+        if (document.activeElement !== els.customCmpValue) {
+          els.customCmpValue.value = String(state.customFilterValue);
+        }
 
         // Sync segmented mode buttons
         els.modeButtons.forEach(function (btn) {
@@ -2106,27 +3602,35 @@
 
       function renderPlaybackControls() {
         var total = getCurrentInput().data.length;
-        var finished = state.stepIndex >= total;
+        var finished = state.stepIndex >= total && sim.phase === "idle";
+        var hasActivity = state.stepIndex > 0 || sim.phase !== "idle" || state.outputItems.length > 0 || state.rejectedItems.length > 0 || state.accumulator !== null;
 
         els.btnPlay.disabled = state.isPlaying;
-        els.btnPause.disabled = !state.isPlaying;
-        els.btnNext.disabled = state.isPlaying || finished;
-        els.btnReset.disabled = state.stepIndex === 0 && !state.isPlaying;
+        els.btnPause.disabled = !state.isPlaying && (sim.phase === "idle" || sim.paused);
+        els.btnNext.disabled = state.isPlaying || (finished && sim.phase === "idle");
+        els.btnReset.disabled = !hasActivity;
         els.speedDisplay.textContent = state.speedMultiplier.toFixed(2).replace(/\.00$/, ".0") + "x";
+
+        // Sync Step-by-Step Call Simulator toolbar controls
+        els.callBtnPlay.textContent = state.isPlaying ? "Pause" : "Play";
+        els.callBtnPlay.classList.toggle("is-playing", state.isPlaying);
+        els.callBtnNext.disabled = state.isPlaying || (finished && sim.phase === "idle");
+        els.callBtnReset.disabled = !hasActivity;
+        els.callSpeedSlider.value = String(state.speedMultiplier);
+        els.callSpeedDisplay.textContent = state.speedMultiplier.toFixed(2) + "x";
       }
 
       function renderConveyorStage() {
         var inputData = getCurrentInput().data;
-        var op = getCurrentOperation();
         var preset = getCurrentLambdaPreset();
         var total = inputData.length;
-        var finished = state.stepIndex >= total;
+        var finished = state.stepIndex >= total && sim.phase === "idle";
 
         // Top banner
         els.activeLambdaCode.textContent = preset.lambdaText;
-        els.activeLambdaBanner.classList.toggle("active-step", state.stepIndex > 0 && !finished);
+        els.activeLambdaBanner.classList.toggle("active-step", sim.phase !== "idle");
 
-        if (state.stepIndex === 0) {
+        if (state.stepIndex === 0 && !state.currentStepDetail && sim.phase === "idle") {
           els.stageProgressText.textContent = "Ready · Step 0 of " + total;
         } else if (finished) {
           els.stageProgressText.textContent = "Complete · " + total + " of " + total + " items processed";
@@ -2134,196 +3638,231 @@
           els.stageProgressText.textContent = "Processing · Step " + state.stepIndex + " of " + total;
         }
 
-        // Input Belt (remaining items)
-        var waiting = inputData.slice(state.stepIndex);
-        els.inputCount.textContent = waiting.length + (waiting.length === 1 ? " item" : " items");
-        els.inputBeltItems.innerHTML = "";
-        if (waiting.length === 0) {
-          var doneMsg = document.createElement("span");
-          doneMsg.className = "empty-slot-msg";
-          doneMsg.textContent = "All input items fed into gate";
-          els.inputBeltItems.appendChild(doneMsg);
+        // Visual feedback summary strip
+        var queuedVals = sim.blocks
+          .filter(function (b) { return b.status === "queued"; })
+          .map(function (b) { return b.value; });
+        els.fbInputQueue.textContent = queuedVals.length > 0 ? "[" + queuedVals.join(", ") + "]" : "Empty";
+
+        var activeBlk = findActiveBlock();
+        if (activeBlk && sim.phase !== "idle") {
+          els.fbCurrentItem.textContent = "x = " + activeBlk.origValue + (state.currentStepDetail && sim.evaluated ? " (" + sim.verdictText + ")" : "");
+        } else if (state.currentStepDetail) {
+          els.fbCurrentItem.textContent = state.currentStepDetail.evalText;
         } else {
-          waiting.forEach(function (val) {
-            var crate = document.createElement("div");
-            crate.className = "crate input-crate";
-            crate.textContent = val;
-            els.inputBeltItems.appendChild(crate);
-          });
+          els.fbCurrentItem.textContent = "Idle";
         }
 
-        // Animate belt rails while actively playing
-        els.railInput.classList.toggle("moving", state.isPlaying && waiting.length > 0);
-        els.railOutput.classList.toggle("moving", state.isPlaying);
-
-        // Center Processor Chamber
-        els.processorTitle.textContent = "Lambda Station · " + op.title;
-        els.processorZone.classList.toggle("processing", state.stepIndex > 0 && !finished);
-
-        if (!state.currentStepDetail) {
-          els.processorStatus.textContent = "Idle";
-          els.processorChamber.innerHTML =
-            '<p class="empty-slot-msg">Press <strong>Process</strong>, <strong>Play</strong>, or <strong>Next Step</strong> to feed the first number into the lambda gate.</p>';
-        } else {
-          var d = state.currentStepDetail;
-          els.processorStatus.textContent = finished ? "Done" : "Active";
-
-          if (d.kind === "map") {
-            els.processorChamber.innerHTML =
-              '<div class="chamber-active-row">' +
-                '<div class="crate input-crate">' + escapeHtml(d.input) + '</div>' +
-                '<span class="chamber-arrow">&rarr;</span>' +
-                '<div class="crate output-crate">' + escapeHtml(d.output) + '</div>' +
-              '</div>' +
-              '<div class="chamber-eval">' + escapeHtml(d.evalText) + '</div>' +
-              '<span class="verdict-tag verdict-transform">&#9881; ' + d.verdict + '</span>';
-          } else if (d.kind === "filter") {
-            var verdictClass = d.passed ? "verdict-keep" : "verdict-reject";
-            var verdictSymbol = d.passed ? "&#10003;" : "&#10005;";
-            var outCrateClass = d.passed ? "output-crate" : "reject-crate";
-            els.processorChamber.innerHTML =
-              '<div class="chamber-active-row">' +
-                '<div class="crate input-crate">' + escapeHtml(d.input) + '</div>' +
-                '<span class="chamber-arrow">&rarr;</span>' +
-                '<div class="crate ' + outCrateClass + '">' + escapeHtml(d.input) + '</div>' +
-              '</div>' +
-              '<div class="chamber-eval">' + escapeHtml(d.evalText) + '</div>' +
-              '<span class="verdict-tag ' + verdictClass + '">' + verdictSymbol + ' ' + d.verdict + '</span>';
-          } else if (d.kind === "reduce-init") {
-            els.processorChamber.innerHTML =
-              '<div class="chamber-active-row">' +
-                '<div class="crate input-crate">' + escapeHtml(d.input) + '</div>' +
-                '<span class="chamber-arrow">&rarr;</span>' +
-                '<div class="crate acc-crate">acc=' + escapeHtml(d.nextAcc) + '</div>' +
-              '</div>' +
-              '<div class="chamber-eval">' + escapeHtml(d.evalText) + '</div>' +
-              '<span class="verdict-tag verdict-transform">&#9679; ' + d.verdict + '</span>';
-          } else if (d.kind === "reduce") {
-            els.processorChamber.innerHTML =
-              '<div class="chamber-active-row">' +
-                '<div class="crate acc-crate">' + escapeHtml(d.prevAcc) + '</div>' +
-                '<span class="chamber-arrow">+</span>' +
-                '<div class="crate input-crate">' + escapeHtml(d.input) + '</div>' +
-                '<span class="chamber-arrow">&rarr;</span>' +
-                '<div class="crate acc-crate">' + escapeHtml(d.nextAcc) + '</div>' +
-              '</div>' +
-              '<div class="chamber-eval">' + escapeHtml(d.evalText) + '</div>' +
-              '<span class="verdict-tag verdict-keep">&#10003; ' + d.verdict + '</span>';
-          }
-        }
-
-        // Output Belt / Accumulator Bin
-        els.outputBeltItems.innerHTML = "";
         if (state.mode === "reduce") {
-          els.outputZoneTitle.textContent = "Accumulator Register (Final Value)";
-          els.outputCount.textContent = state.accumulator === null ? "Empty" : "1 value";
-          els.rejectChute.classList.remove("visible");
-
-          if (state.accumulator === null) {
-            els.outputBeltItems.innerHTML = '<span class="empty-slot-msg">Accumulator starts empty until step 1</span>';
-          } else {
-            var accCrate = document.createElement("div");
-            accCrate.className = "crate acc-crate";
-            accCrate.textContent = state.accumulator;
-            els.outputBeltItems.appendChild(accCrate);
-          }
+          els.fbOutputLabel.textContent = "Accumulated Result";
+          els.fbOutputResult.className = "feedback-value accent-purple";
+          els.fbOutputResult.textContent = state.accumulator === null ? "None" : "acc = " + state.accumulator;
+        } else if (state.mode === "filter") {
+          els.fbOutputLabel.textContent = "Accepted / Rejected";
+          els.fbOutputResult.className = "feedback-value accent-green";
+          els.fbOutputResult.textContent = "Keep [" + state.outputItems.join(", ") + "] · Reject [" + state.rejectedItems.join(", ") + "]";
         } else {
-          els.outputZoneTitle.textContent = "Output Belt (Result List)";
-          els.outputCount.textContent = state.outputItems.length + (state.outputItems.length === 1 ? " item" : " items");
-
-          if (state.outputItems.length === 0) {
-            els.outputBeltItems.innerHTML = '<span class="empty-slot-msg">Accepted / transformed items appear here</span>';
-          } else {
-            state.outputItems.forEach(function (val) {
-              var crate = document.createElement("div");
-              crate.className = "crate output-crate";
-              crate.textContent = val;
-              els.outputBeltItems.appendChild(crate);
-            });
-          }
-
-          // Reject chute only visible in filter mode when items have been rejected
-          if (state.mode === "filter" && state.rejectedItems.length > 0) {
-            els.rejectChute.classList.add("visible");
-            els.rejectItems.innerHTML = "";
-            state.rejectedItems.forEach(function (val) {
-              var rej = document.createElement("div");
-              rej.className = "crate reject-crate";
-              rej.textContent = val;
-              els.rejectItems.appendChild(rej);
-            });
-          } else {
-            els.rejectChute.classList.remove("visible");
-          }
+          els.fbOutputLabel.textContent = "Output Result";
+          els.fbOutputResult.className = "feedback-value accent-green";
+          els.fbOutputResult.textContent = "[" + state.outputItems.join(", ") + "]";
         }
+
+        if (sim.paused) {
+          els.fbStatusVal.className = "feedback-value accent-purple";
+          els.fbStatusVal.textContent = "Paused";
+        } else if (sim.phase === "feeding") {
+          els.fbStatusVal.className = "feedback-value accent-blue";
+          els.fbStatusVal.textContent = "Conveyor Feeding";
+        } else if (sim.phase === "processing") {
+          els.fbStatusVal.className = "feedback-value accent-purple";
+          els.fbStatusVal.textContent = sim.beacon === "accept" ? "ACCEPT" : sim.beacon === "reject" ? "REJECT" : "Machine Processing";
+        } else if (sim.phase === "exiting") {
+          els.fbStatusVal.className = sim.beacon === "reject" ? "feedback-value accent-red" : "feedback-value accent-green";
+          els.fbStatusVal.textContent = sim.beacon === "reject" ? "Diverting to Reject Chute" : "Delivering to Output";
+        } else if (finished) {
+          els.fbStatusVal.className = "feedback-value accent-green";
+          els.fbStatusVal.textContent = "Complete";
+        } else {
+          els.fbStatusVal.className = "feedback-value";
+          els.fbStatusVal.textContent = "Idle · Waiting";
+        }
+
+        renderCanvasFrame();
+      }
+
+      function appendHighlightedPythonLine(container, text) {
+        var tokenRe = /(#.*$|\b(?:def|return|from|import|lambda|list|map|filter|reduce|print)\b|\b(?:apply_fn|test_fn|combine_fn|result|passed|total)\b|-?\d+)/g;
+        var lastIdx = 0;
+        var match;
+        while ((match = tokenRe.exec(text)) !== null) {
+          if (match.index > lastIdx) {
+            container.appendChild(document.createTextNode(text.slice(lastIdx, match.index)));
+          }
+          var tok = match[0];
+          var span = document.createElement("span");
+          if (tok.charAt(0) === "#") {
+            span.className = "tok-cmt";
+          } else if (/^(def|return|from|import|lambda|list|map|filter|print)$/.test(tok)) {
+            span.className = "tok-kw";
+          } else if (/^-?\d+$/.test(tok)) {
+            span.className = "tok-num";
+          } else {
+            span.className = "tok-fn";
+          }
+          span.textContent = tok;
+          container.appendChild(span);
+          lastIdx = tokenRe.lastIndex;
+        }
+        if (lastIdx < text.length) {
+          container.appendChild(document.createTextNode(text.slice(lastIdx)));
+        }
+      }
+
+      function setExplainSegments(targetEl, segments) {
+        targetEl.innerHTML = "";
+        segments.forEach(function (seg) {
+          if (typeof seg === "string") {
+            targetEl.appendChild(document.createTextNode(seg));
+          } else {
+            var span = document.createElement("span");
+            span.className = seg.cls;
+            span.textContent = seg.text;
+            targetEl.appendChild(span);
+          }
+        });
+      }
+
+      function getLambdaBodyExpr(preset) {
+        var idx = preset.lambdaText.indexOf(":");
+        return idx !== -1 ? preset.lambdaText.slice(idx + 1).trim() : preset.lambdaText;
       }
 
       function renderCodePanel() {
         var inputObj = getCurrentInput();
         var preset = getCurrentLambdaPreset();
         var total = inputObj.data.length;
-        var finished = state.stepIndex >= total;
+        var finished = state.stepIndex >= total && sim.phase === "idle";
+        var activeBlk = findActiveBlock();
+        var expr = getLambdaBodyExpr(preset);
 
-        var lines = [];
-        var activeLineIndex = 0;
-        var phaseDescription = "Line 1 · Input list initialized";
+        var fnName = state.mode === "map" ? "apply_fn" : state.mode === "filter" ? "test_fn" : "combine_fn";
+        var localVar = state.mode === "map" ? "result" : state.mode === "filter" ? "passed" : "total";
+        var paramsStr = state.mode === "reduce" ? "acc, x" : "x";
+        var callStmt = state.mode === "map"
+          ? "answer = list(map(" + fnName + ", " + inputObj.label + "))"
+          : state.mode === "filter"
+            ? "answer = list(filter(" + fnName + ", " + inputObj.label + "))"
+            : "answer = reduce(" + fnName + ", " + inputObj.label + ")";
 
-        if (state.mode === "map") {
-          lines = [
-            "numbers = " + inputObj.label,
-            "transform = " + preset.lambdaText,
-            "result = list(map(transform, numbers))",
-            "print(result)  # -> " + JSON.stringify(inputObj.data.map(preset.fn))
+        var lines = [
+          "def " + fnName + "(" + paramsStr + "):",
+          "    " + localVar + " = " + expr,
+          "    return " + localVar,
+          "",
+          callStmt
+        ];
+
+        var activeLineIndex = 4;
+        var displayStep = Math.min(total, state.stepIndex + (sim.phase !== "idle" && sim.phase !== "exiting" ? 1 : 0));
+        if (displayStep === 0 && sim.phase !== "idle") displayStep = 1;
+        var phaseLabel = "Step 0 of " + total + " · Ready";
+        var explainTitle = "1. Preparing the pipeline";
+        var explainSegments = [
+          "Line 5 prepares ",
+          { cls: "hl-cyan", text: callStmt },
+          " to send each item through ",
+          { cls: "hl-gold", text: fnName },
+          "."
+        ];
+
+        if (sim.phase === "feeding" && activeBlk) {
+          activeLineIndex = 4;
+          phaseLabel = "Step " + displayStep + " of " + total + " · Calling Function";
+          explainTitle = "1. Calling the function";
+          var feedCall = state.mode === "reduce" && state.accumulator !== null
+            ? fnName + "(" + state.accumulator + ", " + activeBlk.origValue + ")"
+            : fnName + "(" + activeBlk.origValue + ")";
+          explainSegments = [
+            "Line 5 invokes ",
+            { cls: "hl-gold", text: feedCall },
+            ", passing ",
+            { cls: "hl-cyan", text: "x = " + activeBlk.origValue },
+            " into the function."
           ];
-          if (state.stepIndex === 0) {
-            activeLineIndex = 0;
-            phaseDescription = "Line 1 · Waiting to feed numbers into map()";
-          } else if (!finished) {
-            activeLineIndex = 1;
-            phaseDescription = "Line 2 · Applying lambda to x = " + inputObj.data[state.stepIndex - 1];
+        } else if (sim.phase === "processing" && activeBlk) {
+          activeLineIndex = 1;
+          phaseLabel = "Step " + displayStep + " of " + total + " · Executing Body";
+          explainTitle = "2. Evaluating the function body";
+          if (state.mode === "reduce" && state.accumulator === null) {
+            explainSegments = [
+              "First item ",
+              { cls: "hl-cyan", text: String(activeBlk.origValue) },
+              " seeds the initial accumulator ",
+              { cls: "hl-gold", text: "acc = " + activeBlk.origValue },
+              "."
+            ];
           } else {
-            activeLineIndex = 3;
-            phaseDescription = "Line 4 · All items mapped into final list";
+            explainSegments = [
+              "Line 2 evaluates ",
+              { cls: "hl-cyan", text: expr },
+              " and stores the result in local variable ",
+              { cls: "hl-gold", text: localVar },
+              "."
+            ];
           }
-        } else if (state.mode === "filter") {
-          lines = [
-            "numbers = " + inputObj.label,
-            "predicate = " + preset.lambdaText,
-            "result = list(filter(predicate, numbers))",
-            "print(result)  # -> " + JSON.stringify(inputObj.data.filter(preset.fn))
+        } else if (sim.phase === "exiting" && activeBlk) {
+          activeLineIndex = 2;
+          phaseLabel = "Step " + displayStep + " of " + total + " · Returning Result";
+          explainTitle = "3. Returning the value";
+          var retStr = state.currentStepDetail
+            ? (state.mode === "map" ? String(state.currentStepDetail.output)
+              : state.mode === "filter" ? (state.currentStepDetail.passed ? "True" : "False")
+              : String(state.currentStepDetail.nextAcc))
+            : "";
+          explainSegments = [
+            "Line 3 executes ",
+            { cls: "hl-gold", text: "return " + localVar },
+            ", sending ",
+            { cls: "hl-green", text: retStr },
+            " back to ",
+            { cls: "hl-gold", text: "answer" },
+            "."
           ];
-          if (state.stepIndex === 0) {
-            activeLineIndex = 0;
-            phaseDescription = "Line 1 · Waiting to test numbers in filter()";
-          } else if (!finished) {
-            activeLineIndex = 1;
-            phaseDescription = "Line 2 · Testing predicate on x = " + inputObj.data[state.stepIndex - 1];
-          } else {
-            activeLineIndex = 3;
-            phaseDescription = "Line 4 · Passing items collected in final list";
-          }
-        } else {
-          var finalVal = inputObj.data.reduce(preset.fn);
-          lines = [
-            "from functools import reduce",
-            "numbers = " + inputObj.label,
-            "combine = " + preset.lambdaText,
-            "result = reduce(combine, numbers)",
-            "print(result)  # -> " + finalVal
+        } else if (finished) {
+          activeLineIndex = 2;
+          phaseLabel = "Step " + total + " of " + total + " · Returning Result";
+          explainTitle = "3. Returning the final value";
+          var finalText = state.mode === "reduce"
+            ? String(state.accumulator)
+            : "[" + state.outputItems.join(", ") + "]";
+          explainSegments = [
+            "Line 3 finishes returning from ",
+            { cls: "hl-gold", text: fnName },
+            ", completing ",
+            { cls: "hl-gold", text: "answer = " + finalText },
+            "."
           ];
-          if (state.stepIndex === 0) {
-            activeLineIndex = 1;
-            phaseDescription = "Line 2 · Waiting to fold numbers with reduce()";
-          } else if (!finished) {
-            activeLineIndex = 2;
-            phaseDescription = "Line 3 · Updating accumulator with x = " + inputObj.data[state.stepIndex - 1];
-          } else {
-            activeLineIndex = 4;
-            phaseDescription = "Line 5 · Final accumulated value ready";
-          }
+        } else if (state.stepIndex > 0 && state.currentStepDetail) {
+          activeLineIndex = 2;
+          phaseLabel = "Step " + state.stepIndex + " of " + total + " · Returning Result";
+          explainTitle = "3. Returning the value";
+          var stepRet = state.mode === "map" ? String(state.currentStepDetail.output)
+            : state.mode === "filter" ? (state.currentStepDetail.passed ? "True" : "False")
+            : String(state.currentStepDetail.nextAcc);
+          explainSegments = [
+            "Line 3 executed ",
+            { cls: "hl-gold", text: "return " + localVar },
+            ", sending ",
+            { cls: "hl-green", text: stepRet },
+            " back to ",
+            { cls: "hl-gold", text: "answer" },
+            "."
+          ];
         }
 
-        els.codePhaseLabel.textContent = phaseDescription;
+        els.codePhaseLabel.textContent = phaseLabel;
+        els.stepExplainTitle.textContent = explainTitle;
+        setExplainSegments(els.resultExplanation, explainSegments);
         els.codeWindow.innerHTML = "";
 
         lines.forEach(function (lineText, idx) {
@@ -2334,10 +3873,15 @@
           numSpan.className = "line-num";
           numSpan.textContent = String(idx + 1);
 
+          var arrowSpan = document.createElement("span");
+          arrowSpan.className = "line-arrow";
+          arrowSpan.textContent = idx === activeLineIndex ? "→" : "";
+
           var codeSpan = document.createElement("span");
-          codeSpan.textContent = lineText;
+          appendHighlightedPythonLine(codeSpan, lineText);
 
           row.appendChild(numSpan);
+          row.appendChild(arrowSpan);
           row.appendChild(codeSpan);
           els.codeWindow.appendChild(row);
         });
@@ -2347,61 +3891,99 @@
         var inputObj = getCurrentInput();
         var preset = getCurrentLambdaPreset();
         var total = inputObj.data.length;
-        var finished = state.stepIndex >= total;
+        var finished = state.stepIndex >= total && sim.phase === "idle";
+        var activeBlk = findActiveBlock();
 
-        if (state.stepIndex === 0) {
-          els.outputStateLabel.textContent = "Waiting to start";
-        } else if (!finished) {
-          els.outputStateLabel.textContent = "In progress (" + state.stepIndex + "/" + total + ")";
+        var fnName = state.mode === "map" ? "apply_fn" : state.mode === "filter" ? "test_fn" : "combine_fn";
+        var localVar = state.mode === "map" ? "result" : state.mode === "filter" ? "passed" : "total";
+
+        els.callParamName.textContent = state.mode === "reduce" ? "acc, x" : "x";
+        els.callLocalName.textContent = localVar;
+        els.outputStateLabel.textContent = "Local variables";
+
+        if (sim.phase === "feeding" && activeBlk) {
+          if (state.mode === "reduce") {
+            els.callFnVal.textContent = state.accumulator === null
+              ? "seed_acc(" + activeBlk.origValue + ")"
+              : fnName + "(" + state.accumulator + ", " + activeBlk.origValue + ")";
+            els.callParamVal.textContent = state.accumulator === null
+              ? "x = " + activeBlk.origValue + " (int)"
+              : "acc=" + state.accumulator + ", x=" + activeBlk.origValue + " (int)";
+          } else {
+            els.callFnVal.textContent = fnName + "(" + activeBlk.origValue + ")";
+            els.callParamVal.textContent = activeBlk.origValue + " (int)";
+          }
+          els.callLocalVal.textContent = "Evaluating...";
+          els.callReturnVal.textContent = "Pending";
+        } else if (sim.phase === "processing" && activeBlk) {
+          if (state.mode === "reduce") {
+            var isSeed = state.currentStepDetail && state.currentStepDetail.kind === "reduce-init";
+            var prevA = state.currentStepDetail ? state.currentStepDetail.prevAcc : state.accumulator;
+            els.callFnVal.textContent = isSeed
+              ? "seed_acc(" + activeBlk.origValue + ")"
+              : fnName + "(" + (prevA !== null ? prevA : "?") + ", " + activeBlk.origValue + ")";
+            els.callParamVal.textContent = isSeed
+              ? "x = " + activeBlk.origValue + " (int)"
+              : "acc=" + (prevA !== null ? prevA : "?") + ", x=" + activeBlk.origValue + " (int)";
+            els.callLocalVal.textContent = sim.evaluated && state.currentStepDetail
+              ? state.currentStepDetail.nextAcc + " (int)"
+              : "Computing...";
+          } else {
+            els.callFnVal.textContent = fnName + "(" + activeBlk.origValue + ")";
+            els.callParamVal.textContent = activeBlk.origValue + " (int)";
+            if (sim.evaluated && state.currentStepDetail) {
+              els.callLocalVal.textContent = state.mode === "map"
+                ? state.currentStepDetail.output + " (int)"
+                : (state.currentStepDetail.passed ? "True (bool)" : "False (bool)");
+            } else {
+              els.callLocalVal.textContent = "Computing...";
+            }
+          }
+          els.callReturnVal.textContent = "Pending";
+        } else if (state.currentStepDetail) {
+          var d = state.currentStepDetail;
+          if (state.mode === "map") {
+            els.callFnVal.textContent = fnName + "(" + d.input + ")";
+            els.callParamVal.textContent = d.input + " (int)";
+            els.callLocalVal.textContent = d.output + " (int)";
+            els.callReturnVal.textContent = d.output + " (int)";
+          } else if (state.mode === "filter") {
+            els.callFnVal.textContent = fnName + "(" + d.input + ")";
+            els.callParamVal.textContent = d.input + " (int)";
+            els.callLocalVal.textContent = d.passed ? "True (bool)" : "False (bool)";
+            els.callReturnVal.textContent = d.passed ? "True (Kept)" : "False (Rejected)";
+          } else {
+            els.callFnVal.textContent = d.kind === "reduce-init"
+              ? "seed_acc(" + d.input + ")"
+              : fnName + "(" + d.prevAcc + ", " + d.input + ")";
+            els.callParamVal.textContent = d.kind === "reduce-init"
+              ? "x = " + d.input + " (int)"
+              : "acc=" + d.prevAcc + ", x=" + d.input + " (int)";
+            els.callLocalVal.textContent = d.nextAcc + " (int)";
+            els.callReturnVal.textContent = d.nextAcc + " (int)";
+          }
         } else {
-          els.outputStateLabel.textContent = "Complete";
+          els.callFnVal.textContent = "Pending";
+          els.callParamVal.textContent = "\u2014";
+          els.callLocalVal.textContent = "\u2014";
+          els.callReturnVal.textContent = "\u2014";
         }
+
+        // Output Console REPL trace
+        var consoleCmd = state.mode === "map"
+          ? ">>> answer = list(map(" + fnName + ", " + inputObj.label + "))"
+          : state.mode === "filter"
+            ? ">>> answer = list(filter(" + fnName + ", " + inputObj.label + "))"
+            : ">>> answer = reduce(" + fnName + ", " + inputObj.label + ")";
+        els.consoleCmd1.textContent = consoleCmd;
+        els.consoleCmd2.textContent = ">>> answer";
 
         if (state.mode === "reduce") {
-          els.resultBoxLabel.textContent = finished ? "Final Accumulated Value" : "Current Accumulator (acc)";
-          els.resultBoxValue.textContent = state.accumulator === null ? "None" : String(state.accumulator);
+          els.consoleReturnType.textContent = finished ? "Returned int" : (state.accumulator === null ? "Pending" : "Running int");
+          els.consoleOutVal.textContent = state.accumulator === null ? "Pending..." : String(state.accumulator);
         } else {
-          els.resultBoxLabel.textContent = finished ? "Final Output List" : "Intermediate Output List";
-          els.resultBoxValue.textContent = "[" + state.outputItems.join(", ") + "]";
-        }
-
-        // Dynamic plain-English explanation
-        if (state.stepIndex === 0) {
-          els.resultExplanation.textContent =
-            "The selected " + state.mode + " operation (" + preset.lambdaText + ") " + preset.explainRule +
-            ". Click Process, Play, or Next Step to watch each item move through the belt.";
-        } else if (!finished) {
-          els.resultExplanation.textContent =
-            "Processed " + state.stepIndex + " of " + total + " items. " +
-            (state.currentStepDetail ? state.currentStepDetail.evalText + "." : "");
-        } else {
-          if (state.mode === "map") {
-            els.resultExplanation.textContent =
-              "Complete! map() applied " + preset.lambdaText + " to all " + total + " items, returning a new list of equal length: [" + state.outputItems.join(", ") + "].";
-          } else if (state.mode === "filter") {
-            els.resultExplanation.textContent =
-              "Complete! filter() kept " + state.outputItems.length + " item(s) matching " + preset.lambdaText + " and rejected " + state.rejectedItems.length + " item(s).";
-          } else {
-            els.resultExplanation.textContent =
-              "Complete! reduce() folded all " + total + " items using " + preset.lambdaText + " down to a single final value: " + state.accumulator + ".";
-          }
-        }
-
-        // Trace Log
-        els.traceList.innerHTML = "";
-        if (state.traceLogs.length === 0) {
-          var placeholder = document.createElement("li");
-          placeholder.className = "trace-item";
-          placeholder.textContent = "No items processed yet. Click Next Step or Play.";
-          els.traceList.appendChild(placeholder);
-        } else {
-          state.traceLogs.forEach(function (entry, idx) {
-            var li = document.createElement("li");
-            li.className = "trace-item" + (idx === state.traceLogs.length - 1 ? " current" : "");
-            li.textContent = entry;
-            els.traceList.appendChild(li);
-          });
-          els.traceList.scrollTop = els.traceList.scrollHeight;
+          els.consoleReturnType.textContent = finished ? "Returned list" : (state.stepIndex === 0 ? "Pending" : "Building list");
+          els.consoleOutVal.textContent = "[" + state.outputItems.join(", ") + "]";
         }
       }
 
@@ -2522,10 +4104,7 @@
 
       els.btnProcess.addEventListener("click", processAllImmediately);
       els.btnPlay.addEventListener("click", startPlayback);
-      els.btnPause.addEventListener("click", function () {
-        stopPlayback();
-        renderAll();
-      });
+      els.btnPause.addEventListener("click", pauseSimulation);
       els.btnNext.addEventListener("click", function () {
         stopPlayback();
         advanceOneStep();
@@ -2537,14 +4116,126 @@
         renderPlaybackControls();
       });
 
+      els.callBtnPlay.addEventListener("click", function () {
+        if (state.isPlaying) {
+          pauseSimulation();
+        } else {
+          startPlayback();
+        }
+      });
+
+      els.callBtnNext.addEventListener("click", function () {
+        stopPlayback();
+        advanceOneStep();
+      });
+
+      els.callBtnReset.addEventListener("click", resetSimulation);
+
+      els.callSpeedSlider.addEventListener("input", function (e) {
+        state.speedMultiplier = parseFloat(e.target.value) || 1.0;
+        els.speedSlider.value = String(state.speedMultiplier);
+        renderPlaybackControls();
+      });
+
       els.btnResetQuiz.addEventListener("click", function () {
         state.quizAnswers = {};
         renderQuiz();
       });
 
+      function addCustomInputPreset() {
+        var raw = els.customInputField.value.trim().replace(/^\[|\]$/g, "");
+        var tokens = raw ? raw.split(/[\s,]+/).filter(Boolean) : [];
+        if (tokens.length < 2 || tokens.length > 8) {
+          els.customInputError.textContent = "Enter 2 to 8 whole numbers separated by commas (e.g. 2, 7, 4, 9).";
+          els.customInputError.hidden = false;
+          return;
+        }
+        var nums = [];
+        for (var i = 0; i < tokens.length; i++) {
+          if (!/^-?\d+$/.test(tokens[i])) {
+            els.customInputError.textContent = "Only whole numbers are allowed (e.g. 2, 7, 4, 9).";
+            els.customInputError.hidden = false;
+            return;
+          }
+          var val = parseInt(tokens[i], 10);
+          if (val < -99 || val > 999) {
+            els.customInputError.textContent = "Keep numbers between -99 and 999 so blocks fit cleanly on the belt.";
+            els.customInputError.hidden = false;
+            return;
+          }
+          nums.push(val);
+        }
+
+        els.customInputError.hidden = true;
+        var label = "[" + nums.join(", ") + "]";
+        var existing = INPUT_PRESETS.find(function (p) { return p.label === label; });
+        if (existing) {
+          state.inputPresetId = existing.id;
+        } else {
+          var newId = "custom-" + state.customInputCounter++;
+          INPUT_PRESETS.push({
+            id: newId,
+            label: label,
+            data: nums,
+            isCustom: true
+          });
+          state.inputPresetId = newId;
+        }
+        els.customInputField.value = "";
+        state.showCustomInputBuilder = false;
+        resetSimulation();
+        startPlayback();
+      }
+
+      function applyCustomFilterLambda() {
+        var raw = els.customCmpValue.value.trim();
+        if (!/^-?\d+$/.test(raw)) {
+          els.customLambdaError.textContent = "Enter a whole number between -99 and 999.";
+          els.customLambdaError.hidden = false;
+          return;
+        }
+        var num = parseInt(raw, 10);
+        if (num < -99 || num > 999) {
+          els.customLambdaError.textContent = "Keep threshold between -99 and 999.";
+          els.customLambdaError.hidden = false;
+          return;
+        }
+        els.customLambdaError.hidden = true;
+        state.customFilterValue = num;
+        state.mode = "filter";
+        state.lambdaPresetId = "custom-cmp";
+        state.showCustomLambdaBuilder = true;
+        resetSimulation();
+      }
+
+      els.btnAddCustomInput.addEventListener("click", addCustomInputPreset);
+      els.customInputField.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          addCustomInputPreset();
+        }
+      });
+
+      els.cmpOpButtons.forEach(function (opBtn) {
+        opBtn.addEventListener("click", function () {
+          state.customFilterOp = opBtn.dataset.cmpOp === "<" ? "<" : ">";
+          applyCustomFilterLambda();
+        });
+      });
+
+      els.btnApplyCustomLambda.addEventListener("click", applyCustomFilterLambda);
+      els.customCmpValue.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          applyCustomFilterLambda();
+        }
+      });
+
       // Initial Boot
+      rebuildQueueState();
       renderAll();
       renderQuiz();
+      startAnimationLoop();
     })();
   </script>
 </body>
